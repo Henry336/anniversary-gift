@@ -24,7 +24,7 @@ export const memories = [
   // ----------------------------------------------------------------------------
   {
     id: 2,
-    title: "Capturing the Moment",
+    title: "Golden Park Spa",
     date: "25 Dec 2024 - Part 2",
     
     // ⚠️ IMPORTANT: Update this to the coordinates of the SECOND spot you went to!
@@ -38,7 +38,7 @@ export const memories = [
       "/photos/third.png"
     ],
 
-    description: "After the nerves settled, we went here. I remember we couldn't stop taking photos because we didn't want to forget how happy we looked.",
+    description: "After the nerves settled, we went here. I remember we couldn't stop taking photos because we didn't want to forget how happy we looked. We also had our first kiss here!",
   },
 
   // ----------------------------------------------------------------------------
