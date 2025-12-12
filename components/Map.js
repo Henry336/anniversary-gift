@@ -8,12 +8,12 @@ import { memories } from './memoriesData';
 // ==============================================================================
 // 🎵 MUSIC PLAYLIST CONFIGURATION
 // ==============================================================================
-// Add your 4 piano covers here. They will play in a loop!
+// Add your piano covers here. They will play in a loop!
 const SONG_PLAYLIST = [
-  "/music/song1.mp3", // Your current song
-  "/music/song2.mp3", // Piano Cover 1
-  "/music/song3.mp3", // Piano Cover 2
-  "/music/song4.mp3"  // Piano Cover 3
+  "/music/song1.mp3", 
+  "/music/song2.mp3", 
+  "/music/song3.mp3", 
+  "/music/song4.mp3"  
 ];
 
 // --- ICON CONFIG ---
@@ -27,25 +27,47 @@ const icon = L.icon({
   shadowSize: [41, 41]
 });
 
-// --- MUSIC PLAYER COMPONENT (Now supports Playlist) ---
+// --- MUSIC PLAYER COMPONENT (With Auto-Play Force) ---
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const audioRef = useRef(null);
 
   useEffect(() => {
+    // 1. Set volume
     if (audioRef.current) {
-      audioRef.current.volume = 0.4; // 40% Volume
-      
-      // Attempt Auto-Play
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => setIsPlaying(true))
-          .catch(() => setIsPlaying(false)); 
-      }
+      audioRef.current.volume = 0.4; 
     }
-  }, [currentSongIndex]); // Re-run when song changes
+
+    // 2. Define the "Play" function
+    const startAudio = async () => {
+      try {
+        if (audioRef.current) {
+          await audioRef.current.play();
+          setIsPlaying(true);
+          // If successful, remove the fallback listeners
+          document.removeEventListener('click', startAudio);
+          document.removeEventListener('touchstart', startAudio);
+        }
+      } catch (err) {
+        console.log("Autoplay blocked by browser. Waiting for interaction...");
+        setIsPlaying(false);
+      }
+    };
+
+    // 3. Try to play immediately on load
+    startAudio();
+
+    // 4. FALLBACK: If immediate play fails, play on the very first click/tap anywhere on screen
+    document.addEventListener('click', startAudio, { once: true });
+    document.addEventListener('touchstart', startAudio, { once: true });
+
+    // Cleanup listeners when component unmounts
+    return () => {
+      document.removeEventListener('click', startAudio);
+      document.removeEventListener('touchstart', startAudio);
+    };
+  }, [currentSongIndex]); // Re-run if song changes
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -56,17 +78,15 @@ const MusicPlayer = () => {
   };
 
   const handleSongEnd = () => {
-    // Go to next song, loop back to 0 if at end
     setCurrentSongIndex((prev) => (prev + 1) % SONG_PLAYLIST.length);
   };
 
   return (
     <div className="absolute top-5 left-16 z-[1000]">
-      {/* Audio Element with Playlist Logic */}
       <audio 
         ref={audioRef} 
         src={SONG_PLAYLIST[currentSongIndex]} 
-        onEnded={handleSongEnd} // Auto-next when song finishes
+        onEnded={handleSongEnd} 
       />
 
       <button 
@@ -105,7 +125,6 @@ function MapController({ activeMemory }) {
   const map = useMap();
   useEffect(() => {
     if (activeMemory) {
-      // Offset lat to account for the card covering the bottom
       const targetLat = activeMemory.location[0] - 0.002;
       const targetLng = activeMemory.location[1];
       
@@ -133,7 +152,6 @@ export default function MemoryMap() {
 
   const activeMemory = memories[activeIndex];
 
-  // 1. Reset stack & MINIMIZE STATE when changing memories
   useEffect(() => {
     if (activeMemory && activeMemory.images) {
       setImageOrder(activeMemory.images);
@@ -143,7 +161,6 @@ export default function MemoryMap() {
     setIsMinimized(false);
   }, [activeMemory]);
 
-  // 2. SHUFFLE LOGIC
   const performShuffle = useCallback(() => {
     setIsShuffling(true); 
     setTimeout(() => {
@@ -158,7 +175,6 @@ export default function MemoryMap() {
     }, 300); 
   }, []);
 
-  // 3. AUTO-SHUFFLE TIMER
   useEffect(() => {
     if (!activeMemory?.images || imageOrder.length <= 1) return;
     const timer = setTimeout(() => {
@@ -167,7 +183,6 @@ export default function MemoryMap() {
     return () => clearTimeout(timer);
   }, [imageOrder, activeMemory, performShuffle]);
 
-  // 4. CHAPTER CHANGE
   const changeMemory = (newIndex) => {
     setIsFading(true);
     setTimeout(() => {
@@ -262,7 +277,7 @@ export default function MemoryMap() {
         {/* CARD CONTAINER */}
         <div className="bg-black/80 backdrop-blur-xl border border-white/10 text-white rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 ease-in-out">
           
-          {/* HEADER BAR (Always Visible) */}
+          {/* HEADER BAR */}
           <div 
             className="flex justify-between items-center p-4 bg-white/5 cursor-pointer hover:bg-white/10 transition-colors"
             onClick={() => setIsMinimized(!isMinimized)}
@@ -271,31 +286,24 @@ export default function MemoryMap() {
               <span className="text-[10px] uppercase tracking-widest text-rose-400 font-bold">
                 Memory {activeIndex + 1}/{memories.length}
               </span>
-              {/* Show title here if minimized */}
               {isMinimized && (
                 <span className="text-sm font-bold truncate max-w-[150px]">{activeMemory.title}</span>
               )}
             </div>
             
-            {/* TOGGLE ARROW */}
             <button className="text-white/70 hover:text-white transition-colors">
               {isMinimized ? (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
               )}
             </button>
           </div>
 
-          {/* MAIN CONTENT (Collapsible) */}
+          {/* MAIN CONTENT */}
           <div className={`transition-all duration-500 ease-in-out ${isMinimized ? 'max-h-0 opacity-0' : 'max-h-[800px] opacity-100'}`}>
             <div className="p-5 pt-0">
               
-              {/* FADE CONTENT WRAPPER */}
               <div className={`transition-opacity duration-500 ease-in-out ${isFading ? 'opacity-0' : 'opacity-100'}`}>
                 
                 <div className="flex justify-between items-center mb-2">
@@ -303,7 +311,7 @@ export default function MemoryMap() {
                   <span className="text-[10px] text-gray-400">{activeMemory.date}</span>
                 </div>
 
-                {/* --- PHOTO LOGIC --- */}
+                {/* PHOTOS */}
                 {activeMemory.images && imageOrder.length > 0 ? (
                   <div className={`transition-opacity duration-300 ease-in-out ${isShuffling ? 'opacity-0' : 'opacity-100'}`}>
                     <div className="relative h-64 w-full mb-6 group select-none">

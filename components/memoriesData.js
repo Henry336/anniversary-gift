@@ -8,7 +8,7 @@ export const memories = [
   // ----------------------------------------------------------------------------
   {
     id: 1,
-    title: "The First Date: The Brew", 
+    title: "Our First Date: The Brew", 
     date: "25 Dec 2024",
     location: [16.7973890, 96.1310212], 
     
