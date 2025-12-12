@@ -5,6 +5,17 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { memories } from './memoriesData'; 
 
+// ==============================================================================
+// 🎵 MUSIC PLAYLIST CONFIGURATION
+// ==============================================================================
+// Add your 4 piano covers here. They will play in a loop!
+const SONG_PLAYLIST = [
+  "/music/song1.mp3", // Your current song
+  "/music/song2.mp3", // Piano Cover 1
+  "/music/song3.mp3", // Piano Cover 2
+  "/music/song4.mp3"  // Piano Cover 3
+];
+
 // --- ICON CONFIG ---
 const icon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -16,22 +27,25 @@ const icon = L.icon({
   shadowSize: [41, 41]
 });
 
-// --- MUSIC PLAYER ---
+// --- MUSIC PLAYER COMPONENT (Now supports Playlist) ---
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const audioRef = useRef(null);
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.4; 
+      audioRef.current.volume = 0.4; // 40% Volume
+      
+      // Attempt Auto-Play
       const playPromise = audioRef.current.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => setIsPlaying(false));
-      } else {
-        setIsPlaying(true);
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch(() => setIsPlaying(false)); 
       }
     }
-  }, []);
+  }, [currentSongIndex]); // Re-run when song changes
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -41,14 +55,25 @@ const MusicPlayer = () => {
     }
   };
 
+  const handleSongEnd = () => {
+    // Go to next song, loop back to 0 if at end
+    setCurrentSongIndex((prev) => (prev + 1) % SONG_PLAYLIST.length);
+  };
+
   return (
     <div className="absolute top-5 left-16 z-[1000]">
-      <audio ref={audioRef} src="/music/song.mp3" loop />
+      {/* Audio Element with Playlist Logic */}
+      <audio 
+        ref={audioRef} 
+        src={SONG_PLAYLIST[currentSongIndex]} 
+        onEnded={handleSongEnd} // Auto-next when song finishes
+      />
+
       <button 
         onClick={togglePlay}
         className={`backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${isPlaying ? "bg-rose-500/80 text-white animate-pulse" : "bg-black/60 text-gray-300 hover:bg-white/20"}`}
       >
-        <span>{isPlaying ? "🎵 Playing Our Song" : "🔇 Play Music"}</span>
+        <span>{isPlaying ? `🎵 Playing Track ${currentSongIndex + 1}` : "🔇 Play Music"}</span>
       </button>
     </div>
   );
@@ -80,8 +105,7 @@ function MapController({ activeMemory }) {
   const map = useMap();
   useEffect(() => {
     if (activeMemory) {
-      // Offset slightly to account for the card covering the bottom
-      // We subtract 0.002 from lat to shift the view UP
+      // Offset lat to account for the card covering the bottom
       const targetLat = activeMemory.location[0] - 0.002;
       const targetLng = activeMemory.location[1];
       
@@ -104,7 +128,7 @@ export default function MemoryMap() {
   const [isSatellite, setIsSatellite] = useState(false);
   const [imageOrder, setImageOrder] = useState([]);
   
-  // NEW: State to minimize the card
+  // Minimize Card State
   const [isMinimized, setIsMinimized] = useState(false);
 
   const activeMemory = memories[activeIndex];
@@ -116,7 +140,6 @@ export default function MemoryMap() {
     } else {
       setImageOrder([]);
     }
-    // Always re-open the card when we go to a new memory
     setIsMinimized(false);
   }, [activeMemory]);
 
@@ -257,12 +280,10 @@ export default function MemoryMap() {
             {/* TOGGLE ARROW */}
             <button className="text-white/70 hover:text-white transition-colors">
               {isMinimized ? (
-                // Up Arrow (Show)
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
                 </svg>
               ) : (
-                // Down Arrow (Hide)
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
@@ -271,7 +292,6 @@ export default function MemoryMap() {
           </div>
 
           {/* MAIN CONTENT (Collapsible) */}
-          {/* We use max-h to animate height smoothly */}
           <div className={`transition-all duration-500 ease-in-out ${isMinimized ? 'max-h-0 opacity-0' : 'max-h-[800px] opacity-100'}`}>
             <div className="p-5 pt-0">
               
@@ -300,7 +320,7 @@ export default function MemoryMap() {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
                           </button>
                           <button onClick={openLightbox} className="bg-black/60 text-white p-2 rounded-full backdrop-blur-sm hover:bg-rose-600 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0 4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
                           </button>
                         </div>
                     </div>
