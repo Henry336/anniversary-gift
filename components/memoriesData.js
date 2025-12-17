@@ -65,7 +65,7 @@ export const memories = [
     id: 4,
     title: "Our Third Date: UIT...",
     date: "Feb 2025",
-    location: [16.8100, 96.1600], // ⚠️ CHANGE THIS
+    location: [16.8561432, 96.1352782], 
     
     images: [
       "/photos/date-3-1.png", 
