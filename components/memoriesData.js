@@ -4,7 +4,7 @@
 
 export const memories = [
   // ----------------------------------------------------------------------------
-  // MEMORY 1: The First Date (The Brew)
+  // MEMORY 1: The First Date: The Brew
   // ----------------------------------------------------------------------------
   {
     id: 1,
@@ -23,7 +23,7 @@ export const memories = [
   },
 
   // ----------------------------------------------------------------------------
-  // MEMORY 2: Golden Park Spa (First Kiss)
+  // MEMORY 2: The First Date: Golden Park Spa (First Kiss)
   // ----------------------------------------------------------------------------
   {
     id: 2,
@@ -41,7 +41,7 @@ export const memories = [
   },
 
   // ----------------------------------------------------------------------------
-  // MEMORY 3: [Insert Location Name]
+  // MEMORY 3: The Second Date: The Secretariat
   // ----------------------------------------------------------------------------
   {
     id: 3,
@@ -59,7 +59,7 @@ export const memories = [
   },
 
   // ----------------------------------------------------------------------------
-  // MEMORY 4: [Insert Location Name]
+  // MEMORY 4: The Third Date: UIT
   // ----------------------------------------------------------------------------
   {
     id: 4,
@@ -77,39 +77,39 @@ export const memories = [
   },
 
   // ----------------------------------------------------------------------------
-  // MEMORY 5: [Insert Location Name]
+  // MEMORY 5: The Fourth Date: From Our Homes
   // ----------------------------------------------------------------------------
   {
     id: 5,
-    title: "Memory Number Five",
+    title: "Our Fourth Date: Home",
     date: "March 2025",
-    location: [16.8200, 96.1700], // ⚠️ CHANGE THIS
+    location: [16.8561430, 96.1352782], 
     
     images: [
-      "/photos/loc5-1.jpg", 
-      "/photos/loc5-2.jpg", 
-      "/photos/loc5-3.jpg"
+      "/photos/date-4-1.png", 
+      "/photos/date-4-2.png", 
+      "/photos/date-4-3.png"
     ],
 
-    description: "Fill this in with your story...",
+    description: "ဒီလ ၂၅ ရက်နေ့လည်း ကျောင်းစာမေးပွဲတွေကြောင့်နဲ့ date မသွားဖြစ်ကြပြန်ဘူး😞😞😞 ဒါပေမယ့် ၂၀ ရက်နေ့မှာတော့ Zealax Hotel မှာလာတွေ့လိုက်ရသေးတာပဲလေနော်👀👀👀 ပြီးတော့ မှတ်မှတ်ရရ monthsary အပြီး ၂၈ ရက်နေ့မှာ သဲသဲရယ် ကိုကိုရယ် ကိုကို့အမေရယ် Marketplace ဝင်စားကြတာလေ😭 စားပြီးပြန်တာနဲ့ ငလျင်အကြမ်းကြီးလှုပ်တော့တာပဲဗျာ🙏🏻🙏🏻",
   },
 
   // ----------------------------------------------------------------------------
-  // MEMORY 6: The Airport (The Goodbye)
+  // MEMORY 6: The Fifth Date: Times CITY + Snacks Corner
   // ----------------------------------------------------------------------------
   {
     id: 6,
-    title: "The Airport Promise",
-    date: "Aug 2025",
-    location: [16.9015, 96.1368], 
+    title: "Our Fifth Date: Times City & Snacks Corner",
+    date: "April 2025",
+    location: [16.8165988, 96.1287195], 
     
     images: [
-      "/photos/airport-1.jpg", 
-      "/photos/airport-2.jpg", 
-      "/photos/airport-3.jpg"
+      "/photos/date-5-1.png", 
+      "/photos/date-5-2.png", 
+      "/photos/date-5-3.png"
     ],
 
-    description: "The hardest thing I've ever had to do. I promised you that the distance wouldn't matter, and that I'd work hard at NUS for our future.",
+    description: "ဒီ date လေးအတွက် ကိုကိုတို့တွေ Times City ကို သွားပြီး board game တွေ အဓိကဆော့ခဲ့ကြတယ်😍 အရမ်းပျော်ဖို့ကောင်းခဲ့တယ်နော် မှူးလေး၊ ရောက်ကတည်းက ရယ်နေရတဲ့ ပြန်ရတဲ့အချိန်အထိ တောက်လျှောက်ပဲ၊ PS4 game တွေလည်း အတူဆော့ခဲ့ကြသေးတယိ🙂‍↕️ သဲသဲလည်း tiktoker တွေ interview တာ ခံလိုက်ရသေးတယ်၊ ပြီးတော့ Snacks Corner မှာ ခေါက်ဆွဲဝင်လုပ်ပြီးစားကြတာ စပ်လွန်းလို့ မျက်ရည်ပါကျတယ်ဗျာ😭😭 ဒါပေမယ့် အရမ်းပျော်ဖို့ကောင်းခဲ့တာပဲနော် ဒီတစ်ခေါက်က❤️",
   },
 
   // ----------------------------------------------------------------------------
