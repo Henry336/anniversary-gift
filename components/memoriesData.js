@@ -14,9 +14,9 @@ export const memories = [
     
     // 👇 NOW USING 3 PHOTOS FOR THE FIRST DATE TOO!
     images: [
-      "/photos/first-date-1.png", // Rename your 'first-date.png' to this
-      "/photos/first-date-2.png", // You need to find 2 more photos for this spot!
-      "/photos/first-date-3.png"
+      "/photos/date-1-1.png", // Rename your 'first-date.png' to this
+      "/photos/date-1-2.png", // You need to find 2 more photos for this spot!
+      "/photos/date-1-3.png"
     ],
 
     description: "ကိုကို သဲသဲကိုဖွင့်ပြောခဲ့တဲ့ The Brew ဆိုင်လေးပေါ့😙😙 ပထမဆုံး date မှာ အဆင်သင့်ဖြစ်နေအောင် ပန်းစည်းဝင်ယူပြီး စောစောရောက်အောင်သွားခဲ့တာ၊ ပြီးတော့ ပန်းစည်းကြီးဘယ်နားဖွက်ရမလဲမသိတာနဲ့ waiter ကိုပဲ သိမ်းခိုင်းလိုက်တယ်😭 သဲသဲရောက်လာတော့ သဲသဲနဲ့ သဲသဲအမေနဲ့ကို နှုတ်ဆက်ပြီး သဲသဲကိုအထဲခေါ်သွားပြီးတော့ ဖွင့်ပြောဖို့ကို ပြောမထွက်တာနဲ့ မဖြစ်မနေပြောဖြစ်သွားအောင် waiter ကို ပန်းစည်းယူလာခိုင်းလိုက်တယ်😌❤️",
@@ -32,9 +32,9 @@ export const memories = [
     location: [16.8772458, 96.2065217], 
     
     images: [
-      "/photos/first-date-4.png", 
-      "/photos/first-date-5.png", 
-      "/photos/first-date-6.png"
+      "/photos/date-1-4.png", 
+      "/photos/date-1-5.png", 
+      "/photos/date-1-6.png"
     ],
 
     description: "Cafe date ပြီးတော့ ကိုကိုတို့ Golden Park Spa ကို အတူ taxi ငှါးပြီးသွားခဲ့ကြတယ် ချစ်သူတွေအဖြစ်နဲ့😁❤️❤️❤️❤️ အရမ်းအသည်းယားနေခဲ့တာ၊ ကားပေါ်မှာကတည်းက ဖက်နမ်းချင်စိတ်တွေ မနည်းထိန်းထားရတယ်၊ ဟိုရောက်တော့လည်း လူတစ်သိုက်ရဲ့ တိုက်တွန်းမှုနဲ့ နမ်းဖြစ်သွားတာပါပဲ၊ အဲ့ကတည်းက တစ်ချိန်လုံးနမ်းတဲ့အကျင့်က စသွားတာ ကိုကို စင်္ကာပူလာတဲ့အထိပဲ🥺 အအေးခန်းထဲမှာ နှစ်ယောက်တည်းဖက်ပြီး ကြည်ကြည်နူးနူးရှိနေခဲ့တာလေးလည်း အရမ်းသတိရမိတယ်ဗျာ🫶🏻",
@@ -45,17 +45,17 @@ export const memories = [
   // ----------------------------------------------------------------------------
   {
     id: 3,
-    title: "The Third Adventure",
+    title: "Our Second Date: ဝန်ကြီးများရုံး",
     date: "Jan 2025",
-    location: [16.8000, 96.1500], // ⚠️ CHANGE THIS
+    location: [16.7755078, 96.1658212], 
     
     images: [
-      "/photos/loc3-1.jpg", 
-      "/photos/loc3-2.jpg", 
-      "/photos/loc3-3.jpg"
+      "/photos/date-2-1.jpg", 
+      "/photos/date-2-2.jpg", 
+      "/photos/date-2-3.jpg"
     ],
 
-    description: "Fill this in with your story from January...",
+    description: "ကိုကိုတို့ ဒုတိယ date လေးအတွက် မနက်ပိုင်း Cafe DiBar မှာ စားပြီးတော့ ဝန်ကြီးများရုံးကိုသွားခဲ့ကြတယ်😙😙 အဲ့ရောက်မှသိလိုက်ရတာက ထင်ထားသလောက်တော့ လည်စရာများမနေဘူးဆိုတာပဲ😭 နေကလည်းပူနေရော၊ ကိုကိုတို့ နည်းနည်းပဲ ပတ်ပြီး မုန့်စားခဲ့ကြတယ်၊ ပြီးတော့ အပြန်မှာ အမေ့ကို ဝန်ကြီးများရုံးမှာပဲရှိသေးတယ်ပြောပြီး ကန်တော်ကြီးလစ်ခဲ့ကြတာ😎❤️ (ဒါပေမယ့် ကန်တော်ကြီးမှာလည်း ဝင်တဲ့အပေါက်မှားတော့ လည်စရာသိပ်မရှိနေပြန်ဘူး၊ အဲ့တာနဲ့ ရယ်နေကြရတာနဲ့တင်ပြီးသွားတယ်🥹🥹)",
   },
 
   // ----------------------------------------------------------------------------
