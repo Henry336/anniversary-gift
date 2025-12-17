@@ -1,9 +1,14 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Playfair_Display } from 'next/font/google';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
+
+// ==============================================================================
+// 🎵 MUSIC CONFIGURATION (LOGIN SCREEN ONLY)
+// ==============================================================================
+const LOGIN_MUSIC = "/music/intro-ambience.mp3"; // <--- Add your file here!
 
 // ==============================================================================
 // 🛠️ EDIT YOUR LOGIN SCREEN TEXT HERE
@@ -23,7 +28,7 @@ const TEXT_CONFIG = {
   errorTitle: "Locked",
   errorMessage: "That key doesn't fit.",
   hintTitle: "Almost...",
-  hintMessage: "That was the beginning. Turn the page by one chapter!",
+  hintMessage: "That was the beginning. Turn the page to today.",
   tryAgainButton: "Try Again"
 };
 
@@ -32,17 +37,58 @@ export default function Home() {
   const [showError, setShowError] = useState(false);
   const [errorType, setErrorType] = useState('wrong'); 
   const [stars, setStars] = useState([]); 
+  const [isPlaying, setIsPlaying] = useState(false); // Music State
+  const audioRef = useRef(null);
   const router = useRouter();
 
-  // Generate stars on client-side
+  // --- AUDIO LOGIC ---
   useEffect(() => {
-    // INCREASED COUNT: 150 stars for a denser field
+    // Attempt Auto-Play
+    const playMusic = async () => {
+      if (audioRef.current) {
+        audioRef.current.volume = 0.5; // 50% Volume for background
+        try {
+          await audioRef.current.play();
+          setIsPlaying(true);
+        } catch (err) {
+          console.log("Autoplay blocked, waiting for interaction");
+        }
+      }
+    };
+
+    playMusic();
+
+    // Fallback: Play on first click (if autoplay failed)
+    const handleInteraction = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        playMusic();
+      }
+    };
+
+    window.addEventListener('click', handleInteraction);
+    window.addEventListener('keydown', handleInteraction);
+
+    return () => {
+      window.removeEventListener('click', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
+    };
+  }, []);
+
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (isPlaying) audioRef.current.pause();
+      else audioRef.current.play();
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // --- STAR GENERATION ---
+  useEffect(() => {
     const generatedStars = Array.from({ length: 150 }).map((_, i) => ({
       id: i,
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
       size: Math.random() * 3 + 1, 
-      // FASTER ANIMATION: Random speed between 2s and 5s
       animationDuration: `${Math.random() * 3 + 2}s`, 
       animationDelay: `${Math.random() * 5}s`
     }));
@@ -69,21 +115,28 @@ export default function Home() {
   return (
     <div className={`min-h-screen w-full flex flex-col items-center justify-center bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#2e1065] to-black text-white relative overflow-hidden ${playfair.className}`}>
       
+      {/* --- HIDDEN AUDIO ELEMENT --- */}
+      <audio ref={audioRef} src={LOGIN_MUSIC} loop />
+
+      {/* --- MUSIC TOGGLE BUTTON (Top Right) --- */}
+      <button 
+        onClick={toggleMusic}
+        className="absolute top-6 right-6 z-50 text-white/50 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-3 rounded-full backdrop-blur-md border border-white/10"
+      >
+        {isPlaying ? (
+          <span className="flex items-center gap-2 text-xs tracking-widest uppercase">
+            <span className="animate-pulse text-rose-300">●</span> Music On
+          </span>
+        ) : (
+          <span className="text-xs tracking-widest uppercase">Music Off</span>
+        )}
+      </button>
+
       {/* --- CUSTOM CSS FOR TWINKLING --- */}
       <style jsx>{`
         @keyframes twinkle {
-          /* Start small and dim */
-          0%, 100% { 
-            transform: scale(0.8); 
-            opacity: 0.3; 
-            box-shadow: none; 
-          }
-          /* Grow BIG and GLOWING at 50% */
-          50% { 
-            transform: scale(2.5); 
-            opacity: 1; 
-            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8); 
-          }
+          0%, 100% { transform: scale(0.8); opacity: 0.3; box-shadow: none; }
+          50% { transform: scale(2.5); opacity: 1; box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8); }
         }
         .star-twinkle {
           animation-name: twinkle;
@@ -139,24 +192,16 @@ export default function Home() {
 
       {/* --- THE DREAMY LOGIN BOX --- */}
       <div className="z-10 w-full max-w-md p-8 mx-4">
-        
-        {/* Floating Glass Container */}
         <div className="bg-white/5 backdrop-blur-md rounded-[3rem] shadow-[0_0_80px_rgba(139,92,246,0.15)] border border-white/10 p-10 text-center relative group hover:bg-white/10 transition-colors duration-500">
-          
-          {/* Subtle Glow */}
           <div className="absolute -inset-1 bg-gradient-to-r from-rose-500 to-violet-600 rounded-[3rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-          
           <div className="relative">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-white to-violet-200 drop-shadow-sm tracking-wide">
               {TEXT_CONFIG.title}
             </h1>
-            
             <p className="text-purple-200/80 mb-10 text-sm tracking-[0.2em] uppercase font-sans">
               {TEXT_CONFIG.subtitle}
             </p>
-
             <form onSubmit={handleUnlock} className="flex flex-col gap-6 items-center">
-              
               <div className="relative w-full">
                 <input 
                   type="text" 
@@ -166,7 +211,6 @@ export default function Home() {
                   onChange={(e) => setInputCode(e.target.value)}
                 />
               </div>
-              
               <button 
                 type="submit" 
                 className="mt-4 px-10 py-3 bg-white text-purple-950 rounded-full font-bold hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.3)]"
@@ -176,11 +220,9 @@ export default function Home() {
             </form>
           </div>
         </div>
-
         <p className="text-center text-white/30 text-xs mt-8 tracking-widest font-sans">
           {TEXT_CONFIG.footer}
         </p>
-
       </div>
     </div>
   );

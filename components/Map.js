@@ -204,7 +204,11 @@ export default function MemoryMap() {
   }, [activeIndex]);
 
   const launchGoogleEarth = () => {
-    window.open("https://earth.google.com/web/@1.3521,103.8198,100a,10000d,35y,0h,0t,0r", "_blank");
+  // OLD (General Singapore):
+  // window.open("https://earth.google.com/web/@1.3521,103.8198,100a,10000d,35y,0h,0t,0r", "_blank");
+  
+  // NEW (Directly to KEVII Hall, NUS):
+  window.open("https://earth.google.com/web/@1.2925,103.7766,50a,1000d,35y,0h,0t,0r", "_blank");
   };
 
   const handleShuffleClick = (e) => {
