@@ -113,20 +113,20 @@ export const memories = [
   },
 
   // ----------------------------------------------------------------------------
-  // MEMORY 7: NUS (The Present)
+  // MEMORY 7: The Sixth Date: JoJo Hotpot
   // ----------------------------------------------------------------------------
   {
     id: 7,
-    title: "Where I Am Now",
-    date: "Today",
-    location: [1.2966, 103.7764], 
+    title: "Our Sixth Date: JoJo Hotpot!",
+    date: "May 2025",
+    location: [16.7923661, 96.1696219], 
     
     images: [
-      "/photos/dorm-1.jpg", // Your desk setup
-      "/photos/dorm-2.jpg", // A selfie
-      "/photos/dorm-3.jpg"  // View from window?
+      "/photos/date-6-1.png", // Your desk setup
+      "/photos/date-6-2.png", // A selfie
+      "/photos/date-6-3.png"  // View from window?
     ],
 
-    description: "I'm sitting in my dorm right now, coding this for you. 1,900km is just a number. Every line of code here is a reminder that I'm coming back to you.",
+    description: "Date 6 လေးအတွက်လည်း ကိုကိုတို့ ၂၅ ရက်နေ့အစား အကြောင်းတစ်ခုခုကြောင့် စောသွားလိုက်ပုံပဲ👀👀 JoJo Hotpot သွားစားခဲ့ကြတာ မှတ်မှတ်ရရလေးပေါ့ဗျာ😙❤️❤️ သဲသဲကို ပုစွန်လေးတွေခွါလို့လည်းပြီးရော ကိုကို့အတွက် ကိုကိုခွါရင်း ဝက်သားက အိုးကပ်ပြီး မည်းသွားတာ အူတက်နေပြီ ပြန်တွေးမိတိုင်း😭 ပြီးတော့ ဒီလ အကုန်နားလေးလောက်မှာလည်း ခြူးနဒီဇော်မွေးနေ့ အတူသွားကြပြီး Monopoly ကို ရေလည် အနိုင်ကျင့်ခဲ့ကြတာ😎❤️",
   },
 ];
