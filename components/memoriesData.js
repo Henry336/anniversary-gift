@@ -175,7 +175,7 @@ export const memories = [
     title: "Where I Am Now: KEVII Hall",
     date: "Present",
     // 📍 REAL COORDINATES FOR KING EDWARD VII HALL, NUS
-    location: [1.2925, 103.7766], 
+    location: [1.2924710, 103.7811081], 
     
     images: [
       "/photos/nus-1.png", // Your dorm room?
