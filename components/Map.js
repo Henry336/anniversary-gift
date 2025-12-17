@@ -10,10 +10,10 @@ import { memories } from './memoriesData';
 // ==============================================================================
 // Add your piano covers here. They will play in a loop!
 const SONG_PLAYLIST = [
-  "/music/song1.mp3", 
-  "/music/song2.mp3", 
-  "/music/song3.mp3", 
-  "/music/song4.mp3"  
+  "/music/m-nyar-tot-buu.mp3", 
+  "/music/perfect-cover.mp3", 
+  "/music/like-im-gonna-lose-you.mp3", 
+  "/music/you-are-the-reason.mp3"  
 ];
 
 // --- ICON CONFIG ---
