@@ -51,8 +51,9 @@ const MUSIC_URL = "/music/perfect-cover.mp3";
 
 export default function Plans() {
   const [stars, setStars] = useState([]);
+  const [completed, setCompleted] = useState([]); // Track completed items
 
-  // Star generation (Same dreamy background)
+  // Star generation
   useEffect(() => {
     const generatedStars = Array.from({ length: 100 }).map((_, i) => ({
       id: i,
@@ -64,6 +65,15 @@ export default function Plans() {
     }));
     setStars(generatedStars);
   }, []);
+
+  // Handle Toggle
+  const togglePlan = (index) => {
+    if (completed.includes(index)) {
+      setCompleted(completed.filter(i => i !== index)); // Uncheck
+    } else {
+      setCompleted([...completed, index]); // Check
+    }
+  };
 
   return (
     <div className={`min-h-screen w-full bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#2e1065] to-black text-white relative overflow-hidden ${playfair.className}`}>
@@ -104,29 +114,54 @@ export default function Plans() {
 
         {/* TIMELINE LIST */}
         <div className="flex flex-col gap-6">
-          {PLAN_DATA.map((plan, index) => (
-            <div 
-              key={index}
-              className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex items-center gap-6 transform hover:scale-105 transition-all duration-300 hover:bg-white/10 group opacity-0 animate-drop-in"
-              style={{ 
-                animationDelay: `${index * 0.2}s`, // Staggered delay
-                animationFillMode: 'forwards'      // Keep opacity 1 after animation
-              }}
-            >
-              {/* ICON BUBBLE */}
-              <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-3xl shadow-inner group-hover:bg-white/20 transition-colors shrink-0">
-                {plan.icon}
-              </div>
+          {PLAN_DATA.map((plan, index) => {
+            const isDone = completed.includes(index);
 
-              {/* TEXT */}
-              <div>
-                <h3 className="text-xl font-bold text-rose-100 mb-1">{plan.title}</h3>
-                <p className="text-gray-300 text-sm font-sans font-light leading-relaxed">
-                  {plan.description}
-                </p>
+            return (
+              <div 
+                key={index}
+                onClick={() => togglePlan(index)}
+                className={`
+                  relative border rounded-2xl p-6 flex items-center gap-6 cursor-pointer transition-all duration-300 group opacity-0 animate-drop-in select-none
+                  ${isDone 
+                    ? 'bg-green-500/10 border-green-500/50 scale-[0.98]' 
+                    : 'bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 hover:scale-105'
+                  }
+                `}
+                style={{ 
+                  animationDelay: `${index * 0.2}s`, 
+                  animationFillMode: 'forwards' 
+                }}
+              >
+                {/* ICON BUBBLE */}
+                <div className={`
+                  w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-inner transition-colors shrink-0
+                  ${isDone ? 'bg-green-500/20 grayscale-0' : 'bg-white/10 group-hover:bg-white/20'}
+                `}>
+                  {isDone ? '✅' : plan.icon}
+                </div>
+
+                {/* TEXT */}
+                <div className="flex-1">
+                  <h3 className={`text-xl font-bold mb-1 transition-all ${isDone ? 'text-green-200 line-through decoration-green-500/50' : 'text-rose-100'}`}>
+                    {plan.title}
+                  </h3>
+                  <p className={`text-sm font-sans font-light leading-relaxed transition-all ${isDone ? 'text-green-200/60 line-through' : 'text-gray-300'}`}>
+                    {plan.description}
+                  </p>
+                </div>
+
+                {/* CHECKBOX VISUAL */}
+                <div className={`
+                  w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all
+                  ${isDone ? 'bg-green-500 border-green-500' : 'border-white/30 group-hover:border-white'}
+                `}>
+                  {isDone && <span className="text-black text-xs font-bold">✓</span>}
+                </div>
+
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* FOOTER MESSAGE */}
