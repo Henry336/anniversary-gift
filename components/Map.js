@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
+import { useRouter } from 'next/navigation'; // <--- NEW IMPORT
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { memories } from './memoriesData'; 
@@ -8,7 +9,7 @@ import { memories } from './memoriesData';
 // ==============================================================================
 // 🎵 MUSIC PLAYLIST CONFIGURATION
 // ==============================================================================
-// Add your piano covers here. They will play in a loop!
+// Your specific playlist is preserved here!
 const SONG_PLAYLIST = [
   "/music/m-nyar-tot-buu.mp3", 
   "/music/perfect-cover.mp3", 
@@ -27,25 +28,22 @@ const icon = L.icon({
   shadowSize: [41, 41]
 });
 
-// --- MUSIC PLAYER COMPONENT (With Auto-Play Force) ---
+// --- MUSIC PLAYER COMPONENT ---
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const audioRef = useRef(null);
 
   useEffect(() => {
-    // 1. Set volume
     if (audioRef.current) {
       audioRef.current.volume = 0.4; 
     }
 
-    // 2. Define the "Play" function
     const startAudio = async () => {
       try {
         if (audioRef.current) {
           await audioRef.current.play();
           setIsPlaying(true);
-          // If successful, remove the fallback listeners
           document.removeEventListener('click', startAudio);
           document.removeEventListener('touchstart', startAudio);
         }
@@ -55,19 +53,15 @@ const MusicPlayer = () => {
       }
     };
 
-    // 3. Try to play immediately on load
     startAudio();
-
-    // 4. FALLBACK: If immediate play fails, play on the very first click/tap anywhere on screen
     document.addEventListener('click', startAudio, { once: true });
     document.addEventListener('touchstart', startAudio, { once: true });
 
-    // Cleanup listeners when component unmounts
     return () => {
       document.removeEventListener('click', startAudio);
       document.removeEventListener('touchstart', startAudio);
     };
-  }, [currentSongIndex]); // Re-run if song changes
+  }, [currentSongIndex]); 
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -146,11 +140,10 @@ export default function MemoryMap() {
   const [expandedImage, setExpandedImage] = useState(null);
   const [isSatellite, setIsSatellite] = useState(false);
   const [imageOrder, setImageOrder] = useState([]);
-  
-  // Minimize Card State
   const [isMinimized, setIsMinimized] = useState(false);
 
   const activeMemory = memories[activeIndex];
+  const router = useRouter(); // <--- Initialize Router
 
   useEffect(() => {
     if (activeMemory && activeMemory.images) {
@@ -203,12 +196,9 @@ export default function MemoryMap() {
     }
   }, [activeIndex]);
 
-  const launchGoogleEarth = () => {
-  // OLD (General Singapore):
-  // window.open("https://earth.google.com/web/@1.3521,103.8198,100a,10000d,35y,0h,0t,0r", "_blank");
-  
-  // NEW (Directly to KEVII Hall, NUS):
-  window.open("https://earth.google.com/web/@1.2925,103.7766,50a,1000d,35y,0h,0t,0r", "_blank");
+  // --- NEW: Redirect to Plans Page ---
+  const handleFinalChapter = () => {
+    router.push('/plans');
   };
 
   const handleShuffleClick = (e) => {
@@ -358,11 +348,13 @@ export default function MemoryMap() {
                 >
                   ← PREV
                 </button>
+                
+                {/* ⚠️ THE CHANGED BUTTON ⚠️ */}
                 <button 
-                  onClick={activeIndex === memories.length - 1 ? launchGoogleEarth : handleNext}
+                  onClick={activeIndex === memories.length - 1 ? handleFinalChapter : handleNext}
                   className="px-6 py-3 rounded-full text-xs font-bold bg-rose-600 hover:bg-rose-700 transition-all shadow-lg hover:scale-105 active:scale-95 disabled:opacity-50"
                 >
-                  {activeIndex === memories.length - 1 ? "PLAN OUR FUTURE 🌍" : "NEXT CHAPTER →"}
+                  {activeIndex === memories.length - 1 ? "VIEW OUR PLANS 📅" : "NEXT CHAPTER →"}
                 </button>
               </div>
             </div>
