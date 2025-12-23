@@ -6,21 +6,23 @@ import confetti from 'canvas-confetti';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
+// 👇 EDIT YOUR SUBTITLE HERE
+const PAGE_SUBTITLE = "SPIN TO DECIDE OUR DATE";
+
 const generateRandomColor = () => {
   const hue = Math.floor(Math.random() * 360); 
   const saturation = Math.floor(Math.random() * 20) + 80; 
-  const lightness = Math.floor(Math.random() * 20) + 40; // Darker for white text legibility
+  const lightness = Math.floor(Math.random() * 20) + 40; 
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
-// 👇 2006 ANNIVERSARY RECOMMENDATIONS
 const DEFAULT_MOVIES = [
-  { name: "The Holiday", color: "#ef4444" },     // Romantic Classic
-  { name: "Step Up", color: "#8b5cf6" },         // Dance Romance
-  { name: "The Lake House", color: "#3b82f6" },  // Time Travel Love
-  { name: "She's the Man", color: "#eab308" },   // Funny/Light
-  { name: "Cars", color: "#ef4444" },            // User Favorite
-  { name: "Casino Royale", color: "#10b981" },   // User Favorite
+  { name: "The Holiday", color: "#ef4444" },     
+  { name: "Step Up", color: "#8b5cf6" },         
+  { name: "The Lake House", color: "#3b82f6" },  
+  { name: "She's the Man", color: "#eab308" },   
+  { name: "Cars", color: "#ef4444" },            
+  { name: "Casino Royale", color: "#10b981" },   
 ];
 
 export default function MovieSpinner() {
@@ -49,7 +51,6 @@ export default function MovieSpinner() {
     const randomSliceIndex = Math.floor(Math.random() * movies.length);
     const extraSpins = 360 * 5; 
     
-    // Calculate target to land in center of slice
     const targetRotation = rotation + extraSpins + (360 - (randomSliceIndex * sliceSize) - (sliceSize / 2));
     
     setRotation(targetRotation);
@@ -88,7 +89,8 @@ export default function MovieSpinner() {
       <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-rose-200 to-violet-200">
         Movie Roulette
       </h1>
-      <p className="text-purple-200/60 text-sm tracking-widest mb-10">SPIN TO DECIDE OUR DATE</p>
+      {/* 👇 Using the variable here */}
+      <p className="text-purple-200/60 text-sm tracking-widest mb-10">{PAGE_SUBTITLE}</p>
 
       {/* The Wheel Container */}
       <div className="relative w-80 h-80 md:w-96 md:h-96 mb-12 group font-sans">
@@ -107,22 +109,30 @@ export default function MovieSpinner() {
             transition: isSpinning ? 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none'
           }}
         >
-          {/* 👇 THIS SECTION ADDS THE TEXT LABELS */}
+          {/* 👇 UPDATED TEXT LABELS SECTION */}
           {movies.map((movie, i) => {
             const sliceAngle = 360 / movies.length;
-            const rotateAngle = (sliceAngle * i) + (sliceAngle / 2); // Center of the slice
+            const rotateAngle = (sliceAngle * i) + (sliceAngle / 2);
             return (
+              // This invisible arm rotates from the center to point to the middle of a slice
               <div
                 key={i}
-                className="absolute top-0 left-1/2 w-[1px] h-[50%] origin-bottom flex justify-center pt-4"
-                style={{ transform: `translateX(-50%) rotate(${rotateAngle}deg)` }}
+                className="absolute top-1/2 left-1/2 h-0 origin-left pointer-events-none"
+                style={{
+                  transform: `rotate(${rotateAngle - 90}deg)`, // Adjust so 0deg is top
+                  width: '50%' // Length is the radius
+                }}
               >
-                <span 
-                    className="text-white font-bold text-xs md:text-sm uppercase tracking-wider whitespace-nowrap drop-shadow-md"
-                    style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                {/* Position the text container near the end of the arm */}
+                <div
+                  className="absolute right-[12%] top-1/2 -translate-y-1/2 w-32 flex justify-center items-center"
+                  // Rotate text 90deg so it runs along the circumference
+                  style={{ transform: 'rotate(90deg)' }} 
                 >
-                  {movie.name.length > 15 ? movie.name.substring(0, 15) + '...' : movie.name}
-                </span>
+                  <span className="text-white font-bold text-[10px] md:text-xs uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,1)] whitespace-nowrap truncate px-2">
+                    {movie.name}
+                  </span>
+                </div>
               </div>
             );
           })}
