@@ -19,9 +19,14 @@ const PLAN_DATA = [
     description: "You just finished this! A walk through our 10 chapters. (Completed ✅)"
   },
   {
+    icon: "🍜",
+    title: "Dinner: Buldak Noodles!",
+    description: "Spicy noodle challenge together! Get your milk ready, let's see who handles the heat better."
+  },
+  {
     icon: "🌍",
     title: "Future Tour (Google Earth)",
-    description: "I'll screen-share and we'll walk through the streets of Tokyo and Paris."
+    description: "I'll screen-share and we'll walk through the streets of the cities we want to visit."
   },
   {
     icon: "🍿",
@@ -29,19 +34,19 @@ const PLAN_DATA = [
     description: "Cozy time. We hit play on 'Our Movie' at the exact same second."
   },
   {
+    icon: "📹",
+    title: "Video Calling",
+    description: "Just talking, laughing, and looking at your pretty face. The best part of my day."
+  },
+  {
     icon: "📝",
     title: "The Bucket List",
     description: "We write down 3 places we MUST go when I visit you next."
-  },
-  {
-    icon: "💤",
-    title: "Sleep Call",
-    description: "Falling asleep together, just like always."
   }
 ];
 
 // Optional: Background music for this page (Uplifting track)
-const MUSIC_URL = "/music/song3.mp3"; 
+const MUSIC_URL = "/music/perfect-cover.mp3"; 
 // ==============================================================================
 
 export default function Plans() {
