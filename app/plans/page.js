@@ -9,15 +9,19 @@ import MusicPlayer from '../../components/MusicPlayer';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
+// 👇 EDIT YOUR TITLE AND SUBTITLE HERE
+const PAGE_TITLE = "Anniversary Date Plan";
+const PAGE_SUBTITLE = "အိမ့်မှူးငယ် ❤️ ဟိန်းလင်းထက်";
+
 const PLAN_DATA = [
-  { icon: "🍫", title: "Snack Review", description: "ကိုကိုပေးလိုက်တဲ့ မုန့်တွေ သဲသဲတစ်ခုချင်းစားကြည့်ပြီး review ပေးမယ်၊ ကိုကိုလည်း မစားဖူးတဲ့မုန့်တွေဝယ်ထားပြီး review ပေးမယ် 😋🍽️" },
-  { icon: "🗺️", title: "Memory Lane", description: "ဒါက သဲသဲအခုလေးပဲကြည့်ပြီးသွားတဲ့ Chapter 10 ခု😙❤️" },
-  { icon: "🍜", title: "Dinner: Buldak Noodles!", description: "Carbonara Buldak ခေါက်ဆွဲတူတူစားကြမယ်❤️ (သဲသဲ သောက်စရာတစ်ခုခုယူထားသင့်တယ်၊ နို့ဖြစ်ဖြစ်)" },
-  { icon: "🌍", title: "Future Tour", description: "ကိုကို zoom ကနေခေါ်ပြီး screen-share မယ်၊ ပြီးရင် ကိုကိုတို့ လည်ချင်တဲ့နေရာတွေကို လိုက်ကြည့်ကြမယ် အတူတူ🌎" },
-  { icon: "🍿", title: "Movie Date", description: "ကိုကိုတို့မွေးတဲ့ 2006 ခုနှစ်က ဇာတ်ကားတစ်ခုကြည့်ကြမယ်📺 သဲသဲရော ကိုကိုရော ဇာတ်ကားကိုရှာပြီး တစ်ပြိုင်တည်း play နှိပ်ရမယ်" },
+  { icon: "🍫", title: "Snack Review", description: "ကိုကိုပေးလိုက်တဲ့ မုန့်တွေ သဲသဲတစ်ခုချင်းစားကြည့်ပြီး review ပေးမယ်၊ ကိုကိုလည်း မစားဖူးတဲ့မုန့်တွေဝယ်ထားပြီး review ပေးမယ် 😋🍽️" },
+  { icon: "🗺️", title: "Memory Lane", description: "ဒါက သဲသဲအခုလေးပဲကြည့်ပြီးသွားတဲ့ Chapter 10 ခု😙❤️" },
+  { icon: "🍜", title: "Dinner: Buldak Noodles!", description: "Carbonara Buldak ခေါက်ဆွဲတူတူစားကြမယ်❤️ (သဲသဲ သောက်စရာတစ်ခုခုယူထားသင့်တယ်၊ နို့ဖြစ်ဖြစ်)" },
+  { icon: "🌍", title: "Future Tour", description: "ကိုကို zoom ကနေခေါ်ပြီး screen-share မယ်၊ ပြီးရင် ကိုကိုတို့ လည်ချင်တဲ့နေရာတွေကို လိုက်ကြည့်ကြမယ် အတူတူ🌎" },
+  { icon: "🍿", title: "Movie Date", description: "ကိုကိုတို့မွေးတဲ့ 2006 ခုနှစ်က ဇာတ်ကားတစ်ခုကြည့်ကြမယ်📺 သဲသဲရော ကိုကိုရော ဇာတ်ကားကိုရှာပြီး တစ်ပြိုင်တည်း play နှိပ်ရမယ်" },
   { icon: "🎮", title: "Tic-tac-toe", description: "ဒီမှာ tic-tac-toe တူတူဆော့လို့ရပါတယ်ဗျ🧩", link: "/game" },
   { icon: "📹", title: "Video Call...", description: "🤫🤫🤫" },
-  { icon: "📝", title: "Our 'Travel' Bucket List", description: "သဲသဲ Singapore ကို လာလည်ရင် ကိုကိုတို့နှစ်ယောက် သွားကိုသွားရမယ့် နေရာ ၃ နေရာ ရေးကြမယ်😋" }
+  { icon: "📝", title: "Our 'Travel' Bucket List", description: "သဲသဲ Singapore ကို လာလည်ရင် ကိုကိုတို့နှစ်ယောက် သွားကိုသွားရမယ့် နေရာ ၃ နေရာ ရေးကြမယ်😋" }
 ];
 
 export default function Plans() {
@@ -68,8 +72,13 @@ export default function Plans() {
 
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-20">
         <div className="text-center mb-16 animate-fade-in-down">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-white to-violet-200 drop-shadow-sm">The Grand Plan</h1>
-          <p className="text-purple-200/80 text-sm tracking-[0.3em] uppercase font-sans">OUR ANNIVERSARY ITINERARY</p>
+          {/* 👇 Using the variables here now */}
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-white to-violet-200 drop-shadow-sm">
+            {PAGE_TITLE}
+          </h1>
+          <p className="text-purple-200/80 text-sm tracking-[0.3em] uppercase font-sans">
+            {PAGE_SUBTITLE}
+          </p>
         </div>
 
         <div className="flex flex-col gap-6">
@@ -101,7 +110,6 @@ export default function Plans() {
       {/* Music Player Component */}
       <MusicPlayer />
       
-      {/* 👇 THIS IS THE MISSING PART THAT FIXES THE INVISIBILITY */}
       <style jsx>{`
         @keyframes dropIn {
           from { opacity: 0; transform: translateY(-20px); }
