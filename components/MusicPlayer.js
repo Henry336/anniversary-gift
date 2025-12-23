@@ -1,11 +1,10 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { ref, onValue, set, push, remove } from "firebase/database";
-import { db } from '../app/firebase'; 
-// 👇 DELETE the old import ReactPlayer from 'react-player/youtube';
+import { db } from '@/app/firebase'; // Ensure this path is correct based on our last fix!
 
-// 👇 ADD THIS DYNAMIC IMPORT
 import dynamic from 'next/dynamic';
+// 👇 The clean line should end with a semicolon and nothing else
 const ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false });
 
 export default function MusicPlayer() {
