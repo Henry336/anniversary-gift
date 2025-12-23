@@ -26,13 +26,12 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 export default function TicTacToe() {
-  const [board, setBoard] = useState(Array(9).fill(null));
+  // Use a default filled array to prevent "undefined" errors
+  const [board, setBoard] = useState(Array(9).fill("")); 
   const [xIsNext, setXIsNext] = useState(true);
   const [stars, setStars] = useState([]);
   const [winner, setWinner] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  
-  // NEW: Track who the local user is playing as
   const [myPlayer, setMyPlayer] = useState(null); // 'X' or 'O'
 
   const router = useRouter();
@@ -49,7 +48,13 @@ export default function TicTacToe() {
 
     const unsubscribeBoard = onValue(gameRef, (snapshot) => {
       const data = snapshot.val();
-      if (data) setBoard(data);
+      // Ensure we always have an array of 9 items, replacing null/undefined with empty strings
+      if (data) {
+        const cleanBoard = data.map(val => val ? val : "");
+        setBoard(cleanBoard);
+      } else {
+        setBoard(Array(9).fill(""));
+      }
     });
 
     const unsubscribeTurn = onValue(turnRef, (snapshot) => {
@@ -80,28 +85,33 @@ export default function TicTacToe() {
 
   // 3. HANDLE MOVE
   const handleClick = (i) => {
-    // Stop if: square taken, game over, or user hasn't picked a side
-    if (board[i] || winner || !myPlayer) return;
+    // 1. Is square taken?
+    if (board[i] !== "") return;
+    // 2. Is game over?
+    if (winner) return;
+    // 3. Did user pick a side?
+    if (!myPlayer) return;
 
-    // Stop if it's not the user's turn
+    // 4. Is it my turn?
     const isMyTurn = (xIsNext && myPlayer === 'X') || (!xIsNext && myPlayer === 'O');
     if (!isMyTurn) return;
 
     const newBoard = [...board];
     newBoard[i] = xIsNext ? 'X' : 'O';
+    const nextTurnState = !xIsNext;
 
     // Optimistic update
     setBoard(newBoard);
-    setXIsNext(!xIsNext);
+    setXIsNext(nextTurnState);
 
     // Push to Firebase
     set(ref(db, 'game/board'), newBoard).catch(err => console.error("Firebase Write Error:", err));
-    set(ref(db, 'game/xIsNext'), !xIsNext);
+    set(ref(db, 'game/xIsNext'), nextTurnState);
   };
 
   // 4. RESET GAME
   const resetGame = () => {
-    const emptyBoard = Array(9).fill(null);
+    const emptyBoard = Array(9).fill(""); // Use empty strings instead of null
     set(ref(db, 'game/board'), emptyBoard);
     set(ref(db, 'game/xIsNext'), true);
     setWinner(null);
@@ -111,7 +121,6 @@ export default function TicTacToe() {
     router.push('/plans');
   };
 
-  // Generate Stars
   useEffect(() => {
     const generatedStars = Array.from({ length: 80 }).map((_, i) => ({
       id: i,
@@ -123,19 +132,17 @@ export default function TicTacToe() {
     setStars(generatedStars);
   }, []);
 
-  // Helper to determine status message
   const getStatusMessage = () => {
     if (winner) return `Winner: ${winner} 🎉`;
     if (!myPlayer) return "Choose a side to start";
     
     const isMyTurn = (xIsNext && myPlayer === 'X') || (!xIsNext && myPlayer === 'O');
-    return isMyTurn ? "Your Turn!" : "Waiting for Opponent...";
+    return isMyTurn ? "Your Turn!" : "Opponent's Turn...";
   };
 
   return (
     <div className={`min-h-screen w-full bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#2e1065] to-black text-white flex flex-col items-center justify-center relative overflow-hidden ${playfair.className}`}>
       
-      {/* BACK BUTTON */}
       <button 
         onClick={goBack}
         className="absolute top-6 left-6 z-50 flex items-center gap-2 text-white/60 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full backdrop-blur-md border border-white/10 text-sm font-bold tracking-widest uppercase"
@@ -143,13 +150,11 @@ export default function TicTacToe() {
         ← Back
       </button>
 
-      {/* CONNECTION STATUS */}
       <div className="absolute top-6 right-6 z-50 flex items-center gap-2 text-xs font-mono opacity-50">
         <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400 shadow-[0_0_8px_#4ade80]' : 'bg-red-500'}`} />
         {isConnected ? "ONLINE" : "OFFLINE"}
       </div>
 
-      {/* STARS BACKGROUND */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {stars.map((star) => (
           <div key={star.id} className="absolute bg-white rounded-full animate-pulse" style={{ top: star.top, left: star.left, width: star.size, height: star.size, animationDuration: star.animationDuration }} />
@@ -161,7 +166,6 @@ export default function TicTacToe() {
           Tic Tac Toe
         </h1>
 
-        {/* --- SELECT SIDE OVERLAY (Only shows if no player selected) --- */}
         {!myPlayer ? (
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-6 mt-8 animate-in fade-in zoom-in duration-300">
             <h2 className="text-xl tracking-widest uppercase">Choose your side</h2>
@@ -183,7 +187,6 @@ export default function TicTacToe() {
             </div>
           </div>
         ) : (
-          /* --- GAME BOARD (Shows after selection) --- */
           <>
             <div className="mb-6 h-8 flex items-center justify-center gap-3">
                <span className={`px-3 py-1 rounded-full text-xs font-bold border ${myPlayer === 'X' ? 'border-rose-500/50 bg-rose-500/10 text-rose-300' : 'border-violet-500/50 bg-violet-500/10 text-violet-300'}`}>
@@ -196,21 +199,29 @@ export default function TicTacToe() {
 
             <div className="grid grid-cols-3 gap-3 bg-white/5 p-6 rounded-2xl backdrop-blur-xl shadow-2xl border border-white/10 mx-auto w-fit">
               {board.map((cell, i) => {
-                 // Calculate if this cell should be clickable
+                 // --- LOGIC FIX: Check explicit "X" or "O" ownership ---
                  const isMyTurn = (xIsNext && myPlayer === 'X') || (!xIsNext && myPlayer === 'O');
-                 const isInteractable = !cell && !winner && isMyTurn;
+                 
+                 // Cell is interactable if: 
+                 // 1. It is empty (val is "")
+                 // 2. There is no winner
+                 // 3. It is YOUR turn
+                 const isInteractable = (cell === "") && !winner && isMyTurn;
 
                  return (
                   <button
                     key={i}
                     onClick={() => handleClick(i)}
-                    disabled={!isInteractable}
+                    // Only disable if there is content or winner. 
+                    // We REMOVE 'disabled={!isInteractable}' because it greys out the button.
+                    // Instead we handle the click logic and use CSS cursor to show state.
+                    disabled={cell !== "" || !!winner}
                     className={`
                       w-20 h-20 sm:w-24 sm:h-24 text-5xl font-bold flex items-center justify-center rounded-xl transition-all duration-300 shadow-inner
                       ${cell === 'X' ? 'text-rose-400 bg-white/10 shadow-[0_0_15px_rgba(251,113,133,0.3)]' : 
                         cell === 'O' ? 'text-violet-400 bg-white/10 shadow-[0_0_15px_rgba(167,139,250,0.3)]' : 
                         'bg-white/5 border border-white/10'}
-                      ${isInteractable ? 'hover:bg-white/20 hover:scale-105 cursor-pointer' : 'cursor-default opacity-80'}
+                      ${isInteractable ? 'hover:bg-white/20 hover:scale-105 cursor-pointer ring-2 ring-white/20' : 'cursor-default opacity-80'}
                     `}
                   >
                     {cell ? cell : <span className="invisible">&nbsp;</span>}
@@ -232,7 +243,6 @@ export default function TicTacToe() {
   );
 }
 
-// Logic Helper
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
