@@ -10,7 +10,7 @@ import MusicPlayer from '../../components/MusicPlayer';
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 // 👇 EDIT YOUR TITLE AND SUBTITLE HERE
-const PAGE_TITLE = "Anniversary Date Plan";
+const PAGE_TITLE = "OUR ANNIVERSARY DATE";
 const PAGE_SUBTITLE = "အိမ့်မှူးငယ် ❤️ ဟိန်းလင်းထက်";
 
 const PLAN_DATA = [
