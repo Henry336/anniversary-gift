@@ -7,7 +7,7 @@ import confetti from 'canvas-confetti';
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 // 👇 EDIT YOUR SUBTITLE HERE
-const PAGE_SUBTITLE = "SPIN TO DECIDE OUR MOVIE DATE";
+const PAGE_SUBTITLE = "SPIN TO DECIDE OUR DATE";
 
 const generateRandomColor = () => {
   const hue = Math.floor(Math.random() * 360); 
@@ -47,11 +47,23 @@ export default function MovieSpinner() {
     setWinner(null);
     setIsSpinning(true);
 
-    const sliceSize = 360 / movies.length;
     const randomSliceIndex = Math.floor(Math.random() * movies.length);
-    const extraSpins = 360 * 5; 
+    const sliceSize = 360 / movies.length;
     
-    const targetRotation = rotation + extraSpins + (360 - (randomSliceIndex * sliceSize) - (sliceSize / 2));
+    // 1. Calculate the center angle of the target slice (0 is top, clockwise)
+    const sliceCenterAngle = (randomSliceIndex * sliceSize) + (sliceSize / 2);
+    
+    // 2. Calculate where that angle is RIGHT NOW based on current rotation
+    const currentRotationMod = rotation % 360;
+    const currentAngleInView = (sliceCenterAngle + currentRotationMod) % 360;
+    
+    // 3. Calculate how much we need to rotate to bring that angle to 0 (top)
+    // We add 360 to ensure the number is positive, then modulo 360
+    const degreesToTop = (360 - currentAngleInView) % 360;
+    
+    // 4. Add 5 full spins (1800) + the specific distance needed
+    const extraSpins = 360 * 5; 
+    const targetRotation = rotation + extraSpins + degreesToTop;
     
     setRotation(targetRotation);
 
@@ -89,15 +101,14 @@ export default function MovieSpinner() {
       <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-rose-200 to-violet-200">
         Movie Roulette
       </h1>
-      {/* 👇 Using the variable here */}
       <p className="text-purple-200/60 text-sm tracking-widest mb-10">{PAGE_SUBTITLE}</p>
 
       {/* The Wheel Container */}
       <div className="relative w-80 h-80 md:w-96 md:h-96 mb-12 group font-sans">
         
         {/* Pointer */}
-        <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20 text-5xl text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
-          ▼
+        <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-20">
+           <div className="w-0 h-0 border-l-[20px] border-l-transparent border-t-[30px] border-t-white border-r-[20px] border-r-transparent drop-shadow-lg filter"></div>
         </div>
 
         {/* Spinning Wheel */}
@@ -109,27 +120,23 @@ export default function MovieSpinner() {
             transition: isSpinning ? 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none'
           }}
         >
-          {/* 👇 UPDATED TEXT LABELS SECTION */}
           {movies.map((movie, i) => {
             const sliceAngle = 360 / movies.length;
             const rotateAngle = (sliceAngle * i) + (sliceAngle / 2);
             return (
-              // This invisible arm rotates from the center to point to the middle of a slice
               <div
                 key={i}
                 className="absolute top-1/2 left-1/2 h-0 origin-left pointer-events-none"
                 style={{
-                  transform: `rotate(${rotateAngle - 90}deg)`, // Adjust so 0deg is top
-                  width: '50%' // Length is the radius
+                  transform: `rotate(${rotateAngle - 90}deg)`, 
+                  width: '50%'
                 }}
               >
-                {/* Position the text container near the end of the arm */}
                 <div
-                  className="absolute right-[12%] top-1/2 -translate-y-1/2 w-32 flex justify-center items-center"
-                  // Rotate text 90deg so it runs along the circumference
+                  className="absolute right-[10%] top-1/2 -translate-y-1/2 w-32 flex justify-center items-center text-right"
                   style={{ transform: 'rotate(90deg)' }} 
                 >
-                  <span className="text-white font-bold text-[10px] md:text-xs uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,1)] whitespace-nowrap truncate px-2">
+                  <span className="text-white font-bold text-[10px] md:text-xs uppercase tracking-widest drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap truncate px-2">
                     {movie.name}
                   </span>
                 </div>
