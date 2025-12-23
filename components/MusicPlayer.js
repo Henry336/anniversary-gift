@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { ref, onValue, set, push, remove } from "firebase/database";
-import { db } from '../firebase'; 
+import { db } from '../app/firebase'; 
 // 👇 DELETE the old import ReactPlayer from 'react-player/youtube';
 
 // 👇 ADD THIS DYNAMIC IMPORT
