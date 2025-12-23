@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation';
 import { Playfair_Display } from 'next/font/google';
 import confetti from 'canvas-confetti';
 
-// 👇 Your working import path
 import MusicPlayer from '../../components/MusicPlayer';
+// 👇 IMPORT THE NEW COMPONENT
+import HeartRain from '../../components/HeartRain';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
-// 👇 EDIT YOUR TITLE AND SUBTITLE HERE
 const PAGE_TITLE = "Anniversary Date Hub";
 const PAGE_SUBTITLE = "Hein ❤️ Hmue";
 
@@ -18,7 +18,6 @@ const PLAN_DATA = [
   { icon: "🗺️", title: "Memory Lane", description: "ဒါက သဲသဲအခုလေးပဲကြည့်ပြီးသွားတဲ့ Chapter 10 ခု😙❤️" },
   { icon: "🍜", title: "Dinner: Buldak Noodles!", description: "Carbonara Buldak ခေါက်ဆွဲတူတူစားကြမယ်❤️ (သဲသဲ သောက်စရာတစ်ခုခုယူထားသင့်တယ်၊ နို့ဖြစ်ဖြစ်)" },
   { icon: "🌍", title: "Future Tour", description: "ကိုကို zoom ကနေခေါ်ပြီး screen-share မယ်၊ ပြီးရင် ကိုကိုတို့ လည်ချင်တဲ့နေရာတွေကို လိုက်ကြည့်ကြမယ် အတူတူ🌎" },
-  // 👇 UPDATED: Added link and custom button text
   { 
     icon: "🍿", 
     title: "Movie Date", 
@@ -55,6 +54,7 @@ export default function Plans() {
       const rect = event.currentTarget.getBoundingClientRect();
       const x = (rect.left + rect.width / 2) / window.innerWidth;
       const y = (rect.top + rect.height / 2) / window.innerHeight;
+      // Normal confetti for checking off items
       confetti({ particleCount: 50, spread: 70, origin: { x, y }, colors: ['#fb7185', '#a78bfa', '#ffffff'], zIndex: 9999 });
     } else {
       setCompleted(completed.filter(i => i !== index)); 
@@ -79,7 +79,6 @@ export default function Plans() {
 
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-20">
         <div className="text-center mb-16 animate-fade-in-down">
-          {/* 👇 Using the variables here now */}
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-white to-violet-200 drop-shadow-sm">
             {PAGE_TITLE}
           </h1>
@@ -101,9 +100,14 @@ export default function Plans() {
                 <div className="flex-1">
                   <h3 className={`text-xl font-bold mb-1 transition-all ${isDone ? 'text-green-200 line-through decoration-green-500/50' : 'text-rose-100'}`}>{plan.title}</h3>
                   <p className={`text-sm font-sans font-light leading-relaxed transition-all ${isDone ? 'text-green-200/60 line-through' : 'text-gray-300'}`}>{plan.description}</p>
+                  
+                  {/* 👇 FIXED THE BUTTON RENDERING HERE */}
                   {plan.link && (
-                    <button onClick={(e) => handleGameClick(e, plan.link)} className="mt-3 px-4 py-1.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-full tracking-wider transition-colors shadow-lg">PLAY NOW →</button>
+                    <button onClick={(e) => handleGameClick(e, plan.link)} className="mt-4 px-5 py-2 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-full tracking-wider transition-colors shadow-lg hover:shadow-rose-500/30">
+                      {plan.buttonText || "PLAY NOW →"}
+                    </button>
                   )}
+
                 </div>
                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${isDone ? 'bg-green-500 border-green-500' : 'border-white/30 group-hover:border-white'}`}>
                   {isDone && <span className="text-black text-xs font-bold">✓</span>}
@@ -114,23 +118,23 @@ export default function Plans() {
         </div>
       </div>
 
-      {/* Music Player Component */}
       <MusicPlayer />
+      {/* 👇 ADD THE HEART RAIN COMPONENT */}
+      <HeartRain />
       
       <style jsx>{`
-        @keyframes dropIn {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes dropIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-drop-in { animation: dropIn 0.8s ease-out; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-down { animation: fadeInDown 1s ease-out; }
+        
+        /* New animation for the heart button */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        .animate-drop-in {
-          animation: dropIn 0.8s ease-out;
-        }
-        @keyframes fadeInDown {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-down {
-          animation: fadeInDown 1s ease-out;
+        .animate-bounce-slow {
+            animation: bounce-slow 3s ease-in-out infinite;
         }
       `}</style>
 
