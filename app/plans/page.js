@@ -5,7 +5,7 @@ import { Playfair_Display } from 'next/font/google';
 import confetti from 'canvas-confetti';
 
 // 👇 This is the only music player we need now
-import MusicPlayer from '../components/MusicPlayer'; 
+import MusicPlayer from '@/app/components/MusicPlayer'; 
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
