@@ -2,54 +2,52 @@
 
 import { useEffect, useState } from 'react';
 import Pusher from 'pusher-js';
-import confetti from 'canvas-confetti';
 
 export default function HeartRain() {
   const [isSending, setIsSending] = useState(false);
 
-  // 👇 1. DEFINE THE CUSTOM HEART SHAPE HERE
-  // This tells the library exactly how to draw the curve of a heart
-  let heartShape;
-  
-  // We need to wrap this in a check because 'document' isn't available on the server
-  if (typeof window !== 'undefined') {
-    heartShape = confetti.shapeFromPath({
-      path: 'M167 72c19,-38 37,-56 75,-56 42,0 76,33 76,75 0,76 -76,151 -151,227 -76,-76 -151,-151 -151,-227 0,-42 33,-75 75,-75 38,0 57,18 76,56z', 
-      matrix: [0.03333333333333333, 0, 0, 0.03333333333333333, -5.566666666666666, -5.533333333333333]
-    });
-  }
+  // This function creates a single falling heart element
+  const createHeart = () => {
+    const heart = document.createElement('div');
+    heart.innerHTML = '❤️';
+    heart.style.position = 'fixed';
+    heart.style.top = '-50px';
+    // Random horizontal position (0 to 100vw)
+    heart.style.left = Math.random() * 100 + 'vw';
+    // Random size (20px to 50px)
+    heart.style.fontSize = Math.random() * 30 + 20 + 'px';
+    // Random animation duration (2s to 5s) for variation
+    heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+    heart.style.zIndex = '9999';
+    // Add the animation class defined below
+    heart.classList.add('heart-fall');
+    
+    document.body.appendChild(heart);
 
-  const fireHeartConfetti = () => {
-    const duration = 3000; 
+    // Remove the element after animation ends to keep the site fast
+    setTimeout(() => {
+      heart.remove();
+    }, 5000);
+  };
+
+  // Trigger the rain loop
+  const startRain = () => {
+    const duration = 3000; // Rain for 3 seconds
     const end = Date.now() + duration;
-    const colors = ['#ff0000', '#ff69b4', '#ff1493', '#db7093'];
 
-    (function frame() {
-      confetti({
-        particleCount: 3,
-        angle: 270, 
-        spread: 100, 
-        origin: { x: Math.random(), y: -0.1 },
-        colors: colors,
-        
-        // 👇 2. USE THE CUSTOM VARIABLE HERE
-        shapes: [heartShape], 
-        
-        scalar: 4,         
-        gravity: 0.4,      
-        drift: 0,
-        ticks: 400,        
-        zIndex: 9999,
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
+    // Create a new heart every 50 milliseconds
+    const interval = setInterval(() => {
+      if (Date.now() > end) {
+        clearInterval(interval);
+      } else {
+        createHeart();
+        createHeart(); // Spawn 2 at a time for density
       }
-    }());
+    }, 50);
   };
 
   useEffect(() => {
-    // Standard Pusher Setup
+    // 1. Pusher Setup
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
     });
@@ -58,7 +56,7 @@ export default function HeartRain() {
 
     channel.bind('hearts-triggered', (data) => {
       console.log('Heart signal received!', data);
-      fireHeartConfetti();
+      startRain();
     });
 
     return () => {
@@ -70,7 +68,8 @@ export default function HeartRain() {
   const sendLove = async () => {
     if (isSending) return;
     setIsSending(true);
-    fireHeartConfetti(); 
+    
+    startRain(); // Immediate local feedback
 
     try {
       await fetch('/api/trigger-hearts', { method: 'POST' });
@@ -82,12 +81,27 @@ export default function HeartRain() {
   };
 
   return (
-    <button
-      onClick={sendLove}
-      disabled={isSending}
-      className={`fixed bottom-6 left-6 z-[100] bg-rose-500/80 hover:bg-rose-600 backdrop-blur-md p-4 rounded-full shadow-[0_0_20px_rgba(244,63,94,0.6)] border-2 border-rose-300/50 transition-all hover:scale-110 active:scale-90 ${isSending ? 'grayscale animate-pulse' : 'animate-bounce-slow'}`}
-    >
-      <span className="text-4xl filter drop-shadow-lg">💖</span>
-    </button>
+    <>
+      {/* Defines the animation just for this component */}
+      <style jsx global>{`
+        @keyframes fall {
+          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+        .heart-fall {
+          animation-name: fall;
+          animation-timing-function: linear;
+          pointer-events: none; /* Let clicks pass through */
+        }
+      `}</style>
+
+      <button
+        onClick={sendLove}
+        disabled={isSending}
+        className={`fixed bottom-6 left-6 z-[100] bg-rose-500/80 hover:bg-rose-600 backdrop-blur-md p-4 rounded-full shadow-[0_0_20px_rgba(244,63,94,0.6)] border-2 border-rose-300/50 transition-all hover:scale-110 active:scale-90 ${isSending ? 'grayscale animate-pulse' : 'animate-bounce-slow'}`}
+      >
+        <span className="text-4xl filter drop-shadow-lg">💖</span>
+      </button>
+    </>
   );
 }
