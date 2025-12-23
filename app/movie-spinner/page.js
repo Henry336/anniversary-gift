@@ -6,41 +6,31 @@ import confetti from 'canvas-confetti';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
-// 1. Helper function to generate pleasing random colors
-// We use HSL to ensure colors are vibrant (high saturation) and bright (med-high lightness)
-// so they don't get lost against the dark background.
 const generateRandomColor = () => {
-  const hue = Math.floor(Math.random() * 360); // Full spectrum range
-  const saturation = Math.floor(Math.random() * 20) + 80; // 80% - 100% (Very vibrant)
-  const lightness = Math.floor(Math.random() * 20) + 60; // 60% - 80% (Bright, pastel-ish)
+  const hue = Math.floor(Math.random() * 360); 
+  const saturation = Math.floor(Math.random() * 20) + 80; 
+  const lightness = Math.floor(Math.random() * 20) + 40; // Darker for white text legibility
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
 
-const DEFAULT_MOVIE_NAMES = [
-  "Cars",
-  "Casino Royale", 
-  "The Devil Wears Prada",
-  "Happy Feet",
-  "The Pursuit of Happyness"
+// 👇 2006 ANNIVERSARY RECOMMENDATIONS
+const DEFAULT_MOVIES = [
+  { name: "The Holiday", color: "#ef4444" },     // Romantic Classic
+  { name: "Step Up", color: "#8b5cf6" },         // Dance Romance
+  { name: "The Lake House", color: "#3b82f6" },  // Time Travel Love
+  { name: "She's the Man", color: "#eab308" },   // Funny/Light
+  { name: "Cars", color: "#ef4444" },            // User Favorite
+  { name: "Casino Royale", color: "#10b981" },   // User Favorite
 ];
-
-// 2. Initialize state with objects containing name AND color
-const INITIAL_STATE = DEFAULT_MOVIE_NAMES.map(name => ({
-    name: name,
-    color: generateRandomColor()
-}));
-
 
 export default function MovieSpinner() {
   const router = useRouter();
-  // movies state is now an array of objects: { name: "Cars", color: "hsl(...)" }
-  const [movies, setMovies] = useState(INITIAL_STATE);
+  const [movies, setMovies] = useState(DEFAULT_MOVIES);
   const [newMovieName, setNewMovieName] = useState('');
   const [isSpinning, setIsSpinning] = useState(false);
-  const [winner, setWinner] = useState(null); // Winner will be a movie object
+  const [winner, setWinner] = useState(null); 
   const [rotation, setRotation] = useState(0);
   
-  // Calculate the gradient dynamically using the stored colors
   const getWheelGradient = () => {
     if (movies.length === 0) return 'conic-gradient(#334155 0% 100%)';
     const percent = 100 / movies.length;
@@ -57,20 +47,16 @@ export default function MovieSpinner() {
 
     const sliceSize = 360 / movies.length;
     const randomSliceIndex = Math.floor(Math.random() * movies.length);
-    
-    // Add significant extra rotation for drama (5 full spins)
     const extraSpins = 360 * 5; 
     
-    // Calculate target angle to land in the middle of the random slice
+    // Calculate target to land in center of slice
     const targetRotation = rotation + extraSpins + (360 - (randomSliceIndex * sliceSize) - (sliceSize / 2));
     
     setRotation(targetRotation);
 
-    // Wait for animation to finish (3 seconds)
     setTimeout(() => {
       setIsSpinning(false);
       setWinner(movies[randomSliceIndex]);
-      // Use the winner's specific color for the confetti
       confetti({
         particleCount: 150,
         spread: 100,
@@ -83,7 +69,6 @@ export default function MovieSpinner() {
   const addMovie = (e) => {
     e.preventDefault();
     if (newMovieName.trim()) {
-      // 3. When adding, create a new object with a fresh random color
       setMovies([...movies, { name: newMovieName.trim(), color: generateRandomColor() }]);
       setNewMovieName('');
     }
@@ -96,7 +81,6 @@ export default function MovieSpinner() {
   return (
     <div className={`min-h-screen bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#2e1065] to-black text-white flex flex-col items-center py-12 ${playfair.className} overflow-x-hidden`}>
       
-      {/* Header */}
       <button onClick={() => router.back()} className="absolute top-6 left-6 text-rose-300 hover:text-white transition-colors z-20">
         ← Back to Plan
       </button>
@@ -107,7 +91,7 @@ export default function MovieSpinner() {
       <p className="text-purple-200/60 text-sm tracking-widest mb-10">SPIN TO DECIDE OUR DATE</p>
 
       {/* The Wheel Container */}
-      <div className="relative w-80 h-80 md:w-96 md:h-96 mb-12 group">
+      <div className="relative w-80 h-80 md:w-96 md:h-96 mb-12 group font-sans">
         
         {/* Pointer */}
         <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20 text-5xl text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
@@ -116,36 +100,53 @@ export default function MovieSpinner() {
 
         {/* Spinning Wheel */}
         <div 
-          className="w-full h-full rounded-full border-[6px] border-white/10 shadow-[0_0_60px_rgba(167,139,250,0.2)]"
+          className="w-full h-full rounded-full border-[6px] border-white/10 shadow-[0_0_60px_rgba(167,139,250,0.2)] relative overflow-hidden"
           style={{ 
             background: getWheelGradient(),
             transform: `rotate(${rotation}deg)`,
             transition: isSpinning ? 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none'
           }}
-        />
+        >
+          {/* 👇 THIS SECTION ADDS THE TEXT LABELS */}
+          {movies.map((movie, i) => {
+            const sliceAngle = 360 / movies.length;
+            const rotateAngle = (sliceAngle * i) + (sliceAngle / 2); // Center of the slice
+            return (
+              <div
+                key={i}
+                className="absolute top-0 left-1/2 w-[1px] h-[50%] origin-bottom flex justify-center pt-4"
+                style={{ transform: `translateX(-50%) rotate(${rotateAngle}deg)` }}
+              >
+                <span 
+                    className="text-white font-bold text-xs md:text-sm uppercase tracking-wider whitespace-nowrap drop-shadow-md"
+                    style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                >
+                  {movie.name.length > 15 ? movie.name.substring(0, 15) + '...' : movie.name}
+                </span>
+              </div>
+            );
+          })}
+        </div>
 
-        {/* The Spin Button */}
+        {/* Spin Button */}
         <button 
           onClick={handleSpin}
           disabled={isSpinning || movies.length < 2}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white text-slate-900 rounded-full font-black text-lg shadow-[0_0_30px_rgba(255,255,255,0.3)] border-4 border-purple-50 flex items-center justify-center hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 z-10 tracking-widest"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white text-slate-900 rounded-full font-black text-sm shadow-[0_0_30px_rgba(255,255,255,0.3)] border-4 border-purple-50 flex items-center justify-center hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 z-10 tracking-widest"
         >
           {isSpinning ? '...' : 'SPIN'}
         </button>
       </div>
 
-      {/* Winner Display */}
       <div className="h-20 mb-4 flex items-center justify-center">
         {winner && !isSpinning && (
           <div className="animate-drop-in text-center">
             <p className="text-xs text-purple-300 tracking-widest mb-1">THE WINNER IS:</p>
-            {/* Use the winner's specific color for the text */}
             <h2 className="text-4xl font-bold drop-shadow-sm" style={{ color: winner.color }}>{winner.name}</h2>
           </div>
         )}
       </div>
 
-      {/* Movie List Management */}
       <div className="w-full max-w-md px-6 z-10 relative">
         <form onSubmit={addMovie} className="flex gap-3 mb-8">
           <input 
@@ -168,9 +169,7 @@ export default function MovieSpinner() {
             {movies.map((movie, idx) => (
               <div key={idx} className="flex items-center justify-between group bg-white/5 hover:bg-white/10 rounded-xl p-3 transition-colors border border-transparent hover:border-white/5">
                 <div className="flex items-center gap-4">
-                  {/* Use the stored color for the dot */}
                   <div className="w-4 h-4 rounded-full shadow-sm" style={{ backgroundColor: movie.color }}></div>
-                  {/* Use movie.name to display text */}
                   <span className="text-gray-100 font-medium">{movie.name}</span>
                 </div>
                 <button onClick={() => removeMovie(idx)} className="text-white/20 hover:text-rose-400 w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-all">
@@ -186,22 +185,11 @@ export default function MovieSpinner() {
           </div>
         </div>
       </div>
-       {/* Add custom scrollbar styling */}
        <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.3);
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
       `}</style>
     </div>
   );
