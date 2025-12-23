@@ -1,12 +1,15 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Playfair_Display } from 'next/font/google';
+import confetti from 'canvas-confetti'; // <--- Import the confetti library
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 // ==============================================================================
-// 🛠️ CUSTOMIZE YOUR ANNIVERSARY PLANS HERE
+// 🎵 CONFIGURATION
 // ==============================================================================
+const MUSIC_URL = "/music/perfect-cover.mp3"; 
+
 const PLAN_DATA = [
   {
     icon: "🍫",
@@ -45,15 +48,12 @@ const PLAN_DATA = [
   }
 ];
 
-// Optional: Background music for this page (Uplifting track)
-const MUSIC_URL = "/music/perfect-cover.mp3"; 
-// ==============================================================================
-
 export default function Plans() {
   const [stars, setStars] = useState([]);
-  const [completed, setCompleted] = useState([]); // Track completed items
+  const [completed, setCompleted] = useState([]); 
+  const audioRef = useRef(null);
 
-  // Star generation
+  // --- 1. STAR GENERATION ---
   useEffect(() => {
     const generatedStars = Array.from({ length: 100 }).map((_, i) => ({
       id: i,
@@ -66,12 +66,56 @@ export default function Plans() {
     setStars(generatedStars);
   }, []);
 
-  // Handle Toggle
-  const togglePlan = (index) => {
-    if (completed.includes(index)) {
-      setCompleted(completed.filter(i => i !== index)); // Uncheck
+  // --- 2. MUSIC AUTO-PLAY ENGINE ---
+  useEffect(() => {
+    const startAudio = async () => {
+      try {
+        if (audioRef.current) {
+          audioRef.current.volume = 0.5;
+          await audioRef.current.play();
+        }
+      } catch (err) {
+        console.log("Autoplay blocked, waiting for click...");
+      }
+    };
+    startAudio();
+
+    // Fallback listener
+    const handleInteraction = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        startAudio();
+      }
+    };
+    window.addEventListener('click', handleInteraction);
+    return () => window.removeEventListener('click', handleInteraction);
+  }, []);
+
+
+  // --- 3. HANDLE CLICKS & CONFETTI ---
+  const togglePlan = (index, event) => {
+    // Check if we are "checking" (not unchecking) the item
+    const isChecking = !completed.includes(index);
+
+    if (isChecking) {
+      setCompleted([...completed, index]);
+      
+      // 🎉 TRIGGER MINI CONFETTI EXPLOSION 🎉
+      // We calculate the position of the click to make confetti burst from there
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = (rect.left + rect.width / 2) / window.innerWidth;
+      const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+      confetti({
+        particleCount: 40,
+        spread: 70,
+        origin: { x, y },
+        colors: ['#fb7185', '#a78bfa', '#ffffff'], // Rose, Violet, White
+        disableForReducedMotion: true,
+        zIndex: 9999,
+      });
+
     } else {
-      setCompleted([...completed, index]); // Check
+      setCompleted(completed.filter(i => i !== index)); // Uncheck
     }
   };
 
@@ -79,7 +123,7 @@ export default function Plans() {
     <div className={`min-h-screen w-full bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#2e1065] to-black text-white relative overflow-hidden ${playfair.className}`}>
       
       {/* BACKGROUND MUSIC */}
-      <audio autoPlay loop src={MUSIC_URL} />
+      <audio ref={audioRef} loop src={MUSIC_URL} />
 
       {/* STARS LAYER */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -120,7 +164,8 @@ export default function Plans() {
             return (
               <div 
                 key={index}
-                onClick={() => togglePlan(index)}
+                // Pass event 'e' to the toggle function for confetti positioning
+                onClick={(e) => togglePlan(index, e)}
                 className={`
                   relative border rounded-2xl p-6 flex items-center gap-6 cursor-pointer transition-all duration-300 group opacity-0 animate-drop-in select-none
                   ${isDone 
