@@ -10,8 +10,8 @@ import MusicPlayer from '../../components/MusicPlayer';
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 // 👇 EDIT YOUR TITLE AND SUBTITLE HERE
-const PAGE_TITLE = "OUR ANNIVERSARY DATE";
-const PAGE_SUBTITLE = "Hmue ❤️ Hein";
+const PAGE_TITLE = "Anniversary Date Hub";
+const PAGE_SUBTITLE = "Hein ❤️ Hmue";
 
 const PLAN_DATA = [
   { icon: "🍫", title: "Snack Review", description: "ကိုကိုပေးလိုက်တဲ့ မုန့်တွေ သဲသဲတစ်ခုချင်းစားကြည့်ပြီး review ပေးမယ်၊ ကိုကိုလည်း မစားဖူးတဲ့မုန့်တွေဝယ်ထားပြီး review ပေးမယ် 😋🍽️" },
