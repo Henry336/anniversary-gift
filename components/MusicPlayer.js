@@ -1,8 +1,12 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import ReactPlayer from 'react-player/youtube';
 import { ref, onValue, set, push, remove } from "firebase/database";
-import { db } from '../firebase'; // Ensure this points to the file we made in Step 2
+import { db } from '../firebase'; 
+// 👇 DELETE the old import ReactPlayer from 'react-player/youtube';
+
+// 👇 ADD THIS DYNAMIC IMPORT
+import dynamic from 'next/dynamic';
+const ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false });to the file we made in Step 2
 
 export default function MusicPlayer() {
   // State
