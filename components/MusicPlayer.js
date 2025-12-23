@@ -6,7 +6,7 @@ import { db } from '../app/firebase';
 
 // 👇 ADD THIS DYNAMIC IMPORT
 import dynamic from 'next/dynamic';
-const ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false });to the file we made in Step 2
+const ReactPlayer = dynamic(() => import('react-player/youtube'), { ssr: false });
 
 export default function MusicPlayer() {
   // State
