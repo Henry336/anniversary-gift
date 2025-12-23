@@ -7,7 +7,7 @@ import confetti from 'canvas-confetti';
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 // 👇 EDIT YOUR SUBTITLE HERE
-const PAGE_SUBTITLE = "SPIN TO DECIDE OUR DATE";
+const PAGE_SUBTITLE = "SPIN TO DECIDE OUR MOVIE DATE";
 
 const generateRandomColor = () => {
   const hue = Math.floor(Math.random() * 360); 
