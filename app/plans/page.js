@@ -1,14 +1,19 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation'; // Import Router for navigation
+import { useRouter } from 'next/navigation'; 
 import { Playfair_Display } from 'next/font/google';
 import confetti from 'canvas-confetti';
+
+// 👇 STEP 4: IMPORT THE SHARED PLAYER
+import MusicPlayer from '../components/MusicPlayer';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 // ==============================================================================
 // 🎵 CONFIGURATION
 // ==============================================================================
+// Note: You can keep this local music if you want a default background track,
+// or remove it since you now have the shared Vinyl player!
 const MUSIC_URL = "/music/perfect-cover.mp3"; 
 
 const PLAN_DATA = [
@@ -38,12 +43,12 @@ const PLAN_DATA = [
     description: "Cozy time. We hit play on 'Our Movie' at the exact same second."
   },
   
-  // 👇 NEW: THE GAME LINK ITEM
+  // THE GAME LINK ITEM
   {
     icon: "🎮",
     title: "Gaming Session",
     description: "A quick round of Tic-Tac-Toe? Winner gets a wish.",
-    link: "/game" // <--- This tells the code to show a button!
+    link: "/game" 
   },
 
   {
@@ -63,7 +68,7 @@ export default function Plans() {
   const [completed, setCompleted] = useState([]); 
   const [isPlaying, setIsPlaying] = useState(false); 
   const audioRef = useRef(null);
-  const router = useRouter(); // Initialize router
+  const router = useRouter(); 
 
   // --- 1. STAR GENERATION ---
   useEffect(() => {
@@ -78,10 +83,11 @@ export default function Plans() {
     setStars(generatedStars);
   }, []);
 
-  // --- 2. MUSIC ENGINE ---
+  // --- 2. LOCAL MUSIC ENGINE (Optional now that you have MusicPlayer) ---
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = 0.5;
+      // Auto-play policy might block this, but we try anyway
       const playPromise = audioRef.current.play();
       if (playPromise !== undefined) {
         playPromise
@@ -105,7 +111,6 @@ export default function Plans() {
 
   // --- 3. HANDLE CLICKS ---
   const togglePlan = (index, event) => {
-    // If checking (not unchecking), trigger confetti
     const isChecking = !completed.includes(index);
 
     if (isChecking) {
@@ -128,7 +133,6 @@ export default function Plans() {
     }
   };
 
-  // Function to go to game (stops event bubbling so checkbox doesn't trigger)
   const handleGameClick = (e, link) => {
     e.stopPropagation(); 
     router.push(link);
@@ -137,13 +141,15 @@ export default function Plans() {
   return (
     <div className={`min-h-screen w-full bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#2e1065] to-black text-white relative overflow-hidden ${playfair.className}`}>
       
+      {/* Local Audio Element */}
       <audio ref={audioRef} loop src={MUSIC_URL} />
 
+      {/* Local Music Toggle Button (Top Right) */}
       <button 
         onClick={toggleMusic}
         className="fixed top-6 right-6 z-50 text-white/50 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-3 rounded-full backdrop-blur-md border border-white/10 text-xs tracking-widest uppercase"
       >
-        {isPlaying ? "Music On 🎵" : "Music Off 🔇"}
+        {isPlaying ? "Local Audio On 🎵" : "Local Audio Off 🔇"}
       </button>
 
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -209,7 +215,6 @@ export default function Plans() {
                     {plan.description}
                   </p>
 
-                  {/* 👇 GAME BUTTON: Shows only if 'link' exists in data */}
                   {plan.link && (
                     <button
                       onClick={(e) => handleGameClick(e, plan.link)}
@@ -242,6 +247,9 @@ export default function Plans() {
         </div>
 
       </div>
+
+      {/* 👇 STEP 4: SHARED MUSIC PLAYER (Bottom Right) */}
+      <MusicPlayer />
 
       <style jsx>{`
         @keyframes dropIn {
