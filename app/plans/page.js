@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Playfair_Display } from 'next/font/google';
 import confetti from 'canvas-confetti';
 
-// 👇 This is the only music player we need now
+// 👇 Your working import path
 import MusicPlayer from '../../components/MusicPlayer';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
@@ -98,9 +98,27 @@ export default function Plans() {
         </div>
       </div>
 
-      {/* 👇 NEW MUSIC PLAYER COMPONENT */}
+      {/* Music Player Component */}
       <MusicPlayer />
       
+      {/* 👇 THIS IS THE MISSING PART THAT FIXES THE INVISIBILITY */}
+      <style jsx>{`
+        @keyframes dropIn {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-drop-in {
+          animation: dropIn 0.8s ease-out;
+        }
+        @keyframes fadeInDown {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-down {
+          animation: fadeInDown 1s ease-out;
+        }
+      `}</style>
+
     </div>
   );
 }
