@@ -10,7 +10,7 @@ import HeartRain from '../../components/HeartRain';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
-const PAGE_TITLE = "Anniversary Date Hub";
+const PAGE_TITLE = "Anniversary Hub";
 const PAGE_SUBTITLE = "Hein ❤️ Hmue";
 
 const PLAN_DATA = [
