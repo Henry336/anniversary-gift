@@ -18,7 +18,14 @@ const PLAN_DATA = [
   { icon: "🗺️", title: "Memory Lane", description: "ဒါက သဲသဲအခုလေးပဲကြည့်ပြီးသွားတဲ့ Chapter 10 ခု😙❤️" },
   { icon: "🍜", title: "Dinner: Buldak Noodles!", description: "Carbonara Buldak ခေါက်ဆွဲတူတူစားကြမယ်❤️ (သဲသဲ သောက်စရာတစ်ခုခုယူထားသင့်တယ်၊ နို့ဖြစ်ဖြစ်)" },
   { icon: "🌍", title: "Future Tour", description: "ကိုကို zoom ကနေခေါ်ပြီး screen-share မယ်၊ ပြီးရင် ကိုကိုတို့ လည်ချင်တဲ့နေရာတွေကို လိုက်ကြည့်ကြမယ် အတူတူ🌎" },
-  { icon: "🍿", title: "Movie Date", description: "ကိုကိုတို့မွေးတဲ့ 2006 ခုနှစ်က ဇာတ်ကားတစ်ခုကြည့်ကြမယ်📺 သဲသဲရော ကိုကိုရော ဇာတ်ကားကိုရှာပြီး တစ်ပြိုင်တည်း play နှိပ်ရမယ်" },
+  // 👇 UPDATED: Added link and custom button text
+  { 
+    icon: "🍿", 
+    title: "Movie Date", 
+    description: "ကိုကိုတို့မွေးတဲ့ 2006 ခုနှစ်က ဇာတ်ကားတစ်ခုကြည့်ကြမယ်📺 သဲသဲရော ကိုကိုရော ဇာတ်ကားကိုရှာပြီး တစ်ပြိုင်တည်း play နှိပ်ရမယ်",
+    link: "/movie-spinner",
+    buttonText: "Go to movie recommendations"
+  },
   { icon: "🎮", title: "Tic-tac-toe", description: "ဒီမှာ tic-tac-toe တူတူဆော့လို့ရပါတယ်ဗျ🧩", link: "/game" },
   { icon: "📹", title: "Video Call...", description: "🤫🤫🤫" },
   { icon: "📝", title: "Our 'Travel' Bucket List", description: "သဲသဲ Singapore ကို လာလည်ရင် ကိုကိုတို့နှစ်ယောက် သွားကိုသွားရမယ့် နေရာ ၃ နေရာ ရေးကြမယ်😋" }
