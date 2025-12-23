@@ -1,8 +1,6 @@
-// app/api/trigger-hearts/route.js
 import Pusher from 'pusher';
 import { NextResponse } from 'next/server';
 
-// Initialize Pusher on the server side with secret keys
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID,
   key: process.env.NEXT_PUBLIC_PUSHER_KEY,
@@ -13,7 +11,6 @@ const pusher = new Pusher({
 
 export async function POST() {
   try {
-    // Trigger an event called 'hearts-triggered' on the 'anniversary-channel'
     await pusher.trigger('anniversary-channel', 'hearts-triggered', {
       message: 'Love sent!',
     });
