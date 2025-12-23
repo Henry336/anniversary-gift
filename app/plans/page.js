@@ -12,7 +12,7 @@ const playfair = Playfair_Display({ subsets: ['latin'] });
 const PLAN_DATA = [
   { icon: "🍫", title: "Snack Review", description: "ကိုကိုပေးလိုက်တဲ့ မုန့်တွေ သဲသဲတစ်ခုချင်းစားကြည့်ပြီး review ပေးမယ်၊ ကိုကိုလည်း မစားဖူးတဲ့မုန့်တွေဝယ်ထားပြီး review ပေးမယ် 😋🍽️" },
   { icon: "🗺️", title: "Memory Lane", description: "ဒါက သဲသဲအခုလေးပဲကြည့်ပြီးသွားတဲ့ Chapter 10 ခု😙❤️" },
-  { icon: "🍜", title: "Dinner: Buldak Noodles!", description: "Spicy noodle challenge together! Get your milk ready." },
+  { icon: "🍜", title: "Dinner: Buldak Noodles!", description: "Carbonara Buldak ခေါက်ဆွဲတူတူစားကြမယ်❤️ (သဲသဲ သောက်စရာတစ်ခုခုယူထားသင့်တယ်၊ နို့ဖြစ်ဖြစ်)" },
   { icon: "🌍", title: "Future Tour", description: "ကိုကို zoom ကနေခေါ်ပြီး screen-share မယ်၊ ပြီးရင် ကိုကိုတို့ လည်ချင်တဲ့နေရာတွေကို လိုက်ကြည့်ကြမယ် အတူတူ🌎" },
   { icon: "🍿", title: "Movie Date", description: "ကိုကိုတို့မွေးတဲ့ 2006 ခုနှစ်က ဇာတ်ကားတစ်ခုကြည့်ကြမယ်📺 သဲသဲရော ကိုကိုရော ဇာတ်ကားကိုရှာပြီး တစ်ပြိုင်တည်း play နှိပ်ရမယ်" },
   { icon: "🎮", title: "Tic-tac-toe", description: "ဒီမှာ tic-tac-toe တူတူဆော့လို့ရပါတယ်ဗျ🧩", link: "/game" },
