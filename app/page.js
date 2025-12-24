@@ -15,16 +15,16 @@ const CONFIG = {
 
   // The 3 Polaroid Photos
   photo1: {
-    path: "/photos/nus-2.png",  // Make sure this file exists in public/photos/
-    caption: "me"
+    path: "/photos/date-5-1.png",  // Make sure this file exists in public/photos/
+    caption: "At Times City"
   },
   photo2: {
     path: "/photos/date-1-2.png",
     caption: "Our First Date: The Brew ❤️" 
   },
   photo3: {
-    path: "/photos/nus-3.png",
-    caption: "Today ✨"
+    path: "/photos/date-7-1.png",
+    caption: "At JS!"
   },
 
   // The Secret Button (Bottom Center)
