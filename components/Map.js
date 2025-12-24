@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
-import { useRouter } from 'next/navigation'; // <--- NEW IMPORT
+import { useRouter } from 'next/navigation'; 
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { memories } from './memoriesData'; 
@@ -9,7 +9,6 @@ import { memories } from './memoriesData';
 // ==============================================================================
 // 🎵 MUSIC PLAYLIST CONFIGURATION
 // ==============================================================================
-// Your specific playlist is preserved here!
 const SONG_PLAYLIST = [
   "/music/m-nyar-tot-buu.mp3", 
   "/music/perfect-cover.mp3", 
@@ -93,7 +92,7 @@ const MusicPlayer = () => {
   );
 };
 
-// --- TYPEWRITER COMPONENT ---
+// --- TYPEWRITER COMPONENT (FIXED SCROLLING) ---
 const Typewriter = ({ text, speed = 30 }) => {
   const [displayedText, setDisplayedText] = useState('');
   
@@ -111,7 +110,14 @@ const Typewriter = ({ text, speed = 30 }) => {
     return () => clearInterval(timer);
   }, [text, speed]);
 
-  return <p className="text-gray-300 text-sm leading-relaxed min-h-[60px]">{displayedText}</p>;
+  // ⚠️ FIXED: Added scrollable container here
+  return (
+    <div className="max-h-[160px] md:max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+       <p className="text-gray-300 text-sm leading-relaxed min-h-[60px] whitespace-pre-line">
+         {displayedText}
+       </p>
+    </div>
+  );
 };
 
 // --- MAP CONTROLLER ---
@@ -143,7 +149,7 @@ export default function MemoryMap() {
   const [isMinimized, setIsMinimized] = useState(false);
 
   const activeMemory = memories[activeIndex];
-  const router = useRouter(); // <--- Initialize Router
+  const router = useRouter(); 
 
   useEffect(() => {
     if (activeMemory && activeMemory.images) {
@@ -196,7 +202,6 @@ export default function MemoryMap() {
     }
   }, [activeIndex]);
 
-  // --- NEW: Redirect to Plans Page ---
   const handleFinalChapter = () => {
     router.push('/unlock');
   };
@@ -225,6 +230,24 @@ export default function MemoryMap() {
   return (
     <div className="relative h-screen w-full bg-black">
       
+      {/* ADDED STYLE FOR SCROLLBAR */}
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(225, 29, 72, 0.6); 
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(225, 29, 72, 1); 
+        }
+      `}</style>
+
       <MusicPlayer />
 
       <button 
@@ -266,7 +289,7 @@ export default function MemoryMap() {
       </MapContainer>
 
       {/* --- UI OVERLAY --- */}
-      <div className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 z-[1000] w-11/12 max-w-md transition-all duration-300 ${expandedImage ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <div className={`absolute bottom-5 left-1/2 transform -translate-x-1/2 z-[1000] w-11/12 max-w-md transition-all duration-300 ${expandedImage ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         
         {/* CARD CONTAINER */}
         <div className="bg-black/80 backdrop-blur-xl border border-white/10 text-white rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 ease-in-out">
@@ -294,8 +317,8 @@ export default function MemoryMap() {
             </button>
           </div>
 
-          {/* MAIN CONTENT */}
-          <div className={`transition-all duration-500 ease-in-out ${isMinimized ? 'max-h-0 opacity-0' : 'max-h-[800px] opacity-100'}`}>
+          {/* MAIN CONTENT (Added Max Height for Mobile Safety) */}
+          <div className={`transition-all duration-500 ease-in-out ${isMinimized ? 'max-h-0 opacity-0' : 'max-h-[85vh] opacity-100'}`}>
             <div className="p-5 pt-0">
               
               <div className={`transition-opacity duration-500 ease-in-out ${isFading ? 'opacity-0' : 'opacity-100'}`}>
@@ -322,7 +345,7 @@ export default function MemoryMap() {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
                           </button>
                           <button onClick={openLightbox} className="bg-black/60 text-white p-2 rounded-full backdrop-blur-sm hover:bg-rose-600 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0 4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
                           </button>
                         </div>
                     </div>
@@ -336,10 +359,12 @@ export default function MemoryMap() {
                   </button>
                 ) : null}
 
+                {/* TYPEWRITER TEXT */}
                 <Typewriter text={activeMemory.description} speed={30} />
               
               </div> 
 
+              {/* FOOTER BUTTONS */}
               <div className="flex justify-between items-center pt-4 border-t border-white/10 mt-2">
                 <button 
                   onClick={handlePrev}
@@ -349,7 +374,6 @@ export default function MemoryMap() {
                   ← PREV
                 </button>
                 
-                {/* ⚠️ THE CHANGED BUTTON ⚠️ */}
                 <button 
                   onClick={activeIndex === memories.length - 1 ? handleFinalChapter : handleNext}
                   className="px-6 py-3 rounded-full text-xs font-bold bg-rose-600 hover:bg-rose-700 transition-all shadow-lg hover:scale-105 active:scale-95 disabled:opacity-50"
