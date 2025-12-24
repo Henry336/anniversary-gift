@@ -130,14 +130,14 @@ export const memories = [
   },
 
   // ----------------------------------------------------------------------------
-  // MEMORY 8: The Seventh Date (PLACEHOLDER)
+  // MEMORY 8: The Seventh Date: JS
   // ----------------------------------------------------------------------------
   {
     id: 8,
-    title: "Our Seventh Date",
+    title: "Our Seventh Date: Junction Square",
     date: "June 2025",
-    // ⚠️ UPDATE THIS LOCATION! I put a random Yangon spot for now
-    location: [16.8200, 96.1500], 
+   
+    location: [16.8199285, 96.1304261], 
     
     images: [
       "/photos/date-7-1.png", 
@@ -145,26 +145,28 @@ export const memories = [
       "/photos/date-7-3.png"
     ],
 
-    description: "This is a placeholder for your 7th date in June. Don't forget to fill in the Burmese description here! (Date 7 details go here).",
+    description: "ခုနှစ်ခုမြောက် date လေးအတွက် ကိုကိုတို့ 25 ရက်နေ့မှာမသွားဘဲ 14 ရက်နေ့မှာသွားခဲ့ကြတယ်😁 Junction Square မှာ ပန်းအိုးလေးလည်း အတူခြယ်ခဲ့ကြတယ်၊ Photobooth လည်း ရိုက်ခဲ့တယ် 🥰 ပြီးတော့့့့့ malaxiang guo လည်း တူတူစားခဲ့ကြတယ်😋❤️ ပန်းအိုးလေးတွေဆေးခြယ်နေကြတာတောင် video ရှိသေးတယ်ရော၊ နှစ်ယောက်သား မျက်မှောင်ကြီးကြုံ့ပြီးလုပ်နေကြတာ ပြန်ကြည့်တိုင်းအူတက်တာ😭",
   },
 
-  // ----------------------------------------------------------------------------
-  // MEMORY 9: The Eighth Date (PLACEHOLDER)
+// ----------------------------------------------------------------------------
+  // MEMORY 9: The Eighth Date
   // ----------------------------------------------------------------------------
   {
     id: 9,
-    title: "Our Eighth Date",
+    title: "Our Eighth Date: The Brew, Times City, Movies, KanDawGyi Park!", 
     date: "July 2025",
-    // ⚠️ UPDATE THIS LOCATION! I put a random Yangon spot for now
-    location: [16.8300, 96.1600], 
+    location: [16.7973890, 96.1310212], // Don't forget to update the coordinates!
     
+    // 👇 HERE ARE YOUR 5 PHOTOS
     images: [
       "/photos/date-8-1.png", 
       "/photos/date-8-2.png", 
-      "/photos/date-8-3.png"
+      "/photos/date-8-3.png",
+      "/photos/date-8-4.png", // Added
+      "/photos/date-8-5.png"  // Added
     ],
 
-    description: "This is a placeholder for your 8th date in July. Maybe the last one before you left? (Date 8 details go here).",
+    description: "ကိုကို Singapore မလာခင် နှစ်ယောက် အတူ သေချာနောက်ဆုံး date ခဲ့ရတဲ့နေ့လေးနော်😞 နေရာတွေအများကြီးသွားပြီး အစုံလုပ်ခဲ့ရတာပဲဗျာ၊ The Brew ကို စတွဲကတည်းက သွားတာ ၇ လကြာပြီးမှ တူတူပြန်သွားတာရော🥺 ပြီးတော့ မျှားပစ်ကြတာရော၊ ဇာတ်ကားအတူကြည့်တာရော (အဲ့နေ့က ရုံမှာ လူရှုပ်နေလို့ နမ်းပဲနမ်းလိုက်ရတယ်😭😭 နိုးးးးးး)၊ ပြီးတော့ အပြန် ကန်တော်ကြီး ကရဝိတ်သင်္ဘောကြီးရှိတဲ့ဘက်သွားကြပြီး ဆိုင်လေးမှာ အအေးအတူသောက်ကြ အလွမ်းသယ်ကြ ဓာတ်ပုံရိုက်ကြပြီးတော့ ပြန်ခဲ့ကြတယ်😞❤️ ရေးရင်းနဲ့တောင် ပြန်သွားချင်သွားပြီဗျာ",
   },
 
   // ----------------------------------------------------------------------------
@@ -172,8 +174,8 @@ export const memories = [
   // ----------------------------------------------------------------------------
   {
     id: 10,
-    title: "Where I Am Now: KEVII Hall",
-    date: "Present",
+    title: "မီနောင်း KEVII Hall - NUS",
+    date: "Dec 2025",
     // 📍 REAL COORDINATES FOR KING EDWARD VII HALL, NUS
     location: [1.2924710, 103.7811081], 
     
@@ -183,6 +185,6 @@ export const memories = [
       "/photos/nus-3.png"  // A selfie of you coding this?
     ],
 
-    description: "And here I am, at King Edward VII Hall. 1,900km away, but my heart is still right there with you. Every line of code in this website was written here, thinking of you. Happy Anniversary, Thae Thae. ❤️",
+    description: "လောလောဆယ်တော့ ဒီ Anniversary Gift လေး ပြင်ပြီး သဲသဲရဲ့ personal coder ဘွိုင်းဖရန့် (husband) ဖြစ်နေပါတယ်🙂‍↕️ ကိုကိုအခုလို ပြင်ထားတာလေးတွေ ကြိုက်လား မှူးလေး😁 ပစ္စည်းမဟုတ်တဲ့ လက်ဆောင်ဆိုတာ ဒါလေးကိုပြောတာနော်😙 နှစ်ယောက်လုံးကလည်း coder တွေပဲဆိုတော့ သဲသဲ ဒီလိုလေးကြိုက်မယ်ထင်လို့ပါ😛❤️ Happy Anniversary ပါနော် သဲလေးရေ🎉🎉🎉🥳❤️❤️❤️❤️ အသက်ထက်ဆုံးတိုင်အောင် နှစ်ရာနဲ့ချီပြီး အတူချစ်ချစ်ခင်ခင်လက်တွဲသွားကြမယ်နော်😙😙😙😙😙",
   },
 ];
