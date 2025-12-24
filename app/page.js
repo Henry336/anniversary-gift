@@ -1,229 +1,98 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+
 import { useRouter } from 'next/navigation';
 import { Playfair_Display } from 'next/font/google';
 
+// ==============================================================================
+// ⚙️ CONFIGURATION: EDIT THIS SECTION ONLY
+// ==============================================================================
+const CONFIG = {
+  // Where does the secret button take you?
+  redirectRoute: '/starry-login', 
+
+  // The Big Title (Use <br/> to force a new line)
+  title: "Happy <br/> Anniversary!",
+
+  // The 3 Polaroid Photos
+  photo1: {
+    path: "/photos/date-1-1.png",  // Make sure this file exists in public/photos/
+    caption: "Our First Date: The Brew ❤️"
+  },
+  photo2: {
+    path: "/photos/date-1-2.png",
+    caption: "Our other picture! 🤪"
+  },
+  photo3: {
+    path: "/photos/date-1-3.png",
+    caption: "Today ✨"
+  },
+
+  // The Secret Button (Bottom Center)
+  secretButtonColor: "bg-pink-200/50", // Makes it blend in slightly
+  secretButtonHover: "hover:bg-pink-300"
+};
+// ==============================================================================
+// END OF CONFIGURATION
+// ==============================================================================
+
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
-// ==============================================================================
-// 🎵 MUSIC CONFIGURATION (LOGIN SCREEN ONLY)
-// ==============================================================================
-const LOGIN_MUSIC = "/music/intro-ambience.mp3"; // <--- Add your file here!
-
-// ==============================================================================
-// 🛠️ EDIT YOUR LOGIN SCREEN TEXT HERE
-// ==============================================================================
-const TEXT_CONFIG = {
-  title: "The Archive",
-  subtitle: "1 Year Anniversary",
-  placeholder: "• • • • • •", 
-  buttonButton: "Open Vault",
-  footer: "HEIN LIN HTET ❤️ EAINT HMUE NGE",  
-
-  // Secrets
-  correctCode: "251225", 
-  hintCode: "251224",    
-
-  // Popups
-  errorTitle: "Locked",
-  errorMessage: "That key doesn't fit.",
-  hintTitle: "Almost...",
-  hintMessage: "That was the beginning. Turn the page to today.",
-  tryAgainButton: "Try Again"
-};
-
-export default function Home() {
-  const [inputCode, setInputCode] = useState('');
-  const [showError, setShowError] = useState(false);
-  const [errorType, setErrorType] = useState('wrong'); 
-  const [stars, setStars] = useState([]); 
-  const [isPlaying, setIsPlaying] = useState(false); // Music State
-  const audioRef = useRef(null);
+export default function LandingPage() {
   const router = useRouter();
 
-  // --- AUDIO LOGIC ---
-  useEffect(() => {
-    // Attempt Auto-Play
-    const playMusic = async () => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.5; // 50% Volume for background
-        try {
-          await audioRef.current.play();
-          setIsPlaying(true);
-        } catch (err) {
-          console.log("Autoplay blocked, waiting for interaction");
-        }
-      }
-    };
-
-    playMusic();
-
-    // Fallback: Play on first click (if autoplay failed)
-    const handleInteraction = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        playMusic();
-      }
-    };
-
-    window.addEventListener('click', handleInteraction);
-    window.addEventListener('keydown', handleInteraction);
-
-    return () => {
-      window.removeEventListener('click', handleInteraction);
-      window.removeEventListener('keydown', handleInteraction);
-    };
-  }, []);
-
-  const toggleMusic = () => {
-    if (audioRef.current) {
-      if (isPlaying) audioRef.current.pause();
-      else audioRef.current.play();
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  // --- STAR GENERATION ---
-  useEffect(() => {
-    const generatedStars = Array.from({ length: 150 }).map((_, i) => ({
-      id: i,
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      size: Math.random() * 3 + 1, 
-      animationDuration: `${Math.random() * 3 + 2}s`, 
-      animationDelay: `${Math.random() * 5}s`
-    }));
-    setStars(generatedStars);
-  }, []);
-
-  const handleUnlock = (e) => {
-    e.preventDefault(); 
-    if (inputCode === TEXT_CONFIG.correctCode) {
-      router.push('/map'); 
-    } 
-    else if (inputCode === TEXT_CONFIG.hintCode) {
-      setErrorType('hint');
-      setShowError(true);
-      setInputCode('');
-    } 
-    else {
-      setErrorType('wrong');
-      setShowError(true);
-      setInputCode(''); 
-    }
+  const handleSecretClick = () => {
+    router.push(CONFIG.redirectRoute);
   };
 
   return (
-    <div className={`min-h-screen w-full flex flex-col items-center justify-center bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#2e1065] to-black text-white relative overflow-hidden ${playfair.className}`}>
+    <div className={`min-h-screen bg-pink-100 flex flex-col items-center pt-20 pb-4 relative overflow-hidden ${playfair.className}`}>
       
-      {/* --- HIDDEN AUDIO ELEMENT --- */}
-      <audio ref={audioRef} src={LOGIN_MUSIC} loop />
+      {/* --- 1. The Very Big Title --- */}
+      {/* dangerouslySetInnerHTML allows the <br/> tag in the config to work */}
+      <h1 
+        className="text-5xl md:text-8xl font-extrabold text-pink-500 drop-shadow-sm text-center animate-bounce mb-12"
+        dangerouslySetInnerHTML={{ __html: CONFIG.title }}
+      />
 
-      {/* --- MUSIC TOGGLE BUTTON (Top Right) --- */}
-      <button 
-        onClick={toggleMusic}
-        className="absolute top-6 right-6 z-50 text-white/50 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-3 rounded-full backdrop-blur-md border border-white/10"
-      >
-        {isPlaying ? (
-          <span className="flex items-center gap-2 text-xs tracking-widest uppercase">
-            <span className="animate-pulse text-rose-300">●</span> Music On
-          </span>
-        ) : (
-          <span className="text-xs tracking-widest uppercase">Music Off</span>
-        )}
-      </button>
+      {/* --- 2. The 3 Pictures (Polaroid Style) --- */}
+      <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center justify-center z-10 px-4">
+        
+        {/* Picture 1 (Tilted Left) */}
+        <div className="w-64 h-80 bg-white p-3 shadow-xl transform -rotate-3 hover:scale-105 transition-transform duration-300">
+          <div className="w-full h-64 bg-gray-200 mb-2 overflow-hidden border border-gray-100">
+             <img src={CONFIG.photo1.path} alt="Memory 1" className="w-full h-full object-cover" />
+          </div>
+          <p className="text-center text-gray-500 font-bold text-lg">{CONFIG.photo1.caption}</p>
+        </div>
 
-      {/* --- CUSTOM CSS FOR TWINKLING --- */}
-      <style jsx>{`
-        @keyframes twinkle {
-          0%, 100% { transform: scale(0.8); opacity: 0.3; box-shadow: none; }
-          50% { transform: scale(2.5); opacity: 1; box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8); }
-        }
-        .star-twinkle {
-          animation-name: twinkle;
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
-        }
-      `}</style>
+        {/* Picture 2 (Tilted Right) */}
+        <div className="w-64 h-80 bg-white p-3 shadow-xl transform rotate-2 relative md:-top-8 hover:scale-105 transition-transform duration-300">
+          <div className="w-full h-64 bg-gray-200 mb-2 overflow-hidden border border-gray-100">
+             <img src={CONFIG.photo2.path} alt="Memory 2" className="w-full h-full object-cover" />
+          </div>
+          <p className="text-center text-gray-500 font-bold text-lg">{CONFIG.photo2.caption}</p>
+        </div>
 
-      {/* STARS LAYER */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {stars.map((star) => (
-          <div 
-            key={star.id}
-            className="absolute bg-white rounded-full star-twinkle"
-            style={{
-              top: star.top,
-              left: star.left,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              animationDuration: star.animationDuration,
-              animationDelay: star.animationDelay
-            }}
-          />
-        ))}
+        {/* Picture 3 (Tilted Left Again) */}
+        <div className="w-64 h-80 bg-white p-3 shadow-xl transform -rotate-2 hover:scale-105 transition-transform duration-300">
+          <div className="w-full h-64 bg-gray-200 mb-2 overflow-hidden border border-gray-100">
+             <img src={CONFIG.photo3.path} alt="Memory 3" className="w-full h-full object-cover" />
+          </div>
+          <p className="text-center text-gray-500 font-bold text-lg">{CONFIG.photo3.caption}</p>
+        </div>
+
       </div>
 
-      {/* ERROR MODAL */}
-      {showError && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 backdrop-blur-md transition-all duration-500">
-          <div className="bg-white/10 backdrop-blur-xl p-8 rounded-2xl shadow-2xl max-w-sm w-full mx-4 text-center border border-white/20">
-            {errorType === 'hint' ? (
-              <>
-                <div className="text-4xl mb-4">⏳</div>
-                <h3 className="text-2xl font-bold text-white mb-2 italic">{TEXT_CONFIG.hintTitle}</h3>
-                <p className="text-purple-200 mb-6 font-light">{TEXT_CONFIG.hintMessage}</p>
-              </>
-            ) : (
-              <>
-                <div className="text-4xl mb-4">🔒</div>
-                <h3 className="text-2xl font-bold text-white mb-2 italic">{TEXT_CONFIG.errorTitle}</h3>
-                <p className="text-purple-200 mb-6 font-light">{TEXT_CONFIG.errorMessage}</p>
-              </>
-            )}
-            <button 
-              onClick={() => setShowError(false)}
-              className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/40 font-bold py-3 rounded-xl transition-all"
-            >
-              {TEXT_CONFIG.tryAgainButton}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* --- THE DREAMY LOGIN BOX --- */}
-      <div className="z-10 w-full max-w-md p-8 mx-4">
-        <div className="bg-white/5 backdrop-blur-md rounded-[3rem] shadow-[0_0_80px_rgba(139,92,246,0.15)] border border-white/10 p-10 text-center relative group hover:bg-white/10 transition-colors duration-500">
-          <div className="absolute -inset-1 bg-gradient-to-r from-rose-500 to-violet-600 rounded-[3rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-          <div className="relative">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-white to-violet-200 drop-shadow-sm tracking-wide">
-              {TEXT_CONFIG.title}
-            </h1>
-            <p className="text-purple-200/80 mb-10 text-sm tracking-[0.2em] uppercase font-sans">
-              {TEXT_CONFIG.subtitle}
-            </p>
-            <form onSubmit={handleUnlock} className="flex flex-col gap-6 items-center">
-              <div className="relative w-full">
-                <input 
-                  type="text" 
-                  placeholder={TEXT_CONFIG.placeholder}
-                  className="w-full bg-transparent border-b-2 border-white/20 py-3 text-center text-3xl tracking-[0.5em] text-white placeholder-white/10 focus:outline-none focus:border-rose-400 transition-colors font-sans"
-                  value={inputCode}
-                  onChange={(e) => setInputCode(e.target.value)}
-                />
-              </div>
-              <button 
-                type="submit" 
-                className="mt-4 px-10 py-3 bg-white text-purple-950 rounded-full font-bold hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-              >
-                {TEXT_CONFIG.buttonButton}
-              </button>
-            </form>
-          </div>
-        </div>
-        <p className="text-center text-white/30 text-xs mt-8 tracking-widest font-sans">
-          {TEXT_CONFIG.footer}
-        </p>
+      {/* --- 3. The Secret Button --- */}
+      <div className="mt-auto w-full flex justify-center items-end pb-2 opacity-100">
+        <button
+          onClick={handleSecretClick}
+          className={`w-16 h-16 ${CONFIG.secretButtonColor} ${CONFIG.secretButtonHover} rounded-lg transition-colors duration-500 cursor-pointer`}
+          aria-label="Secret entry"
+        >
+        </button>
       </div>
+
     </div>
   );
 }
