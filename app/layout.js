@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Henry & Evelyn | 1 Year Anniversary",
-  description: "A journey through our story.",
+  title: "Happy Anniversary, my love!❤️",
+  description: "A little digital gift for my favorite person.",
 };
 
 export default function RootLayout({ children }) {
