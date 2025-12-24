@@ -198,7 +198,7 @@ export default function MemoryMap() {
 
   // --- NEW: Redirect to Plans Page ---
   const handleFinalChapter = () => {
-    router.push('/plans');
+    router.push('/unlock');
   };
 
   const handleShuffleClick = (e) => {
