@@ -15,15 +15,15 @@ const CONFIG = {
 
   // The 3 Polaroid Photos
   photo1: {
-    path: "/photos/date-1-1.png",  // Make sure this file exists in public/photos/
-    caption: "Our First Date: The Brew ❤️"
+    path: "/photos/nus-2.png",  // Make sure this file exists in public/photos/
+    caption: "me"
   },
   photo2: {
     path: "/photos/date-1-2.png",
-    caption: "Our other picture! 🤪"
+    caption: "Our First Date: The Brew ❤️" 
   },
   photo3: {
-    path: "/photos/date-1-3.png",
+    path: "/photos/nus-3.png",
     caption: "Today ✨"
   },
 
